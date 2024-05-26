@@ -64,7 +64,7 @@ export default LinesChart = ({ data }) => {
             {console.log(lineData)}
             <LineChart
                 
-                isAnimated={true}
+                
                 initialSpacing={0}
                 data={lineData}
                 spacing={50}
