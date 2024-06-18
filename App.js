@@ -22,6 +22,7 @@ import ReportPosting from './src/components/Patient/ReportPosting';
 import VisualSearch from './src/components/Derma/VisualSearch';
 import DiseaseInformationScreen from './src/screens/DiseaseInformationScreen';
 import AskQuestions from './src/screens/AskQuestions';
+import Settings from './src/components/Derma/Settings';
 
 const Stack = createNativeStackNavigator();
 

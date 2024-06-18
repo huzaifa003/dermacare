@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
 // Main Component that uses the Report Card
 const ReportList = () => {
   const [reports, setReports] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(true);
   const [uid, setUid] = useState('');
 
   useEffect(() => {
@@ -143,6 +143,7 @@ const ReportList = () => {
       loadReports(); // Load reports when UID is set or changed
     }
   }, [uid]);
+
 
   const loadReports = () => {
     if (!uid) return; // If no UID, exit the function

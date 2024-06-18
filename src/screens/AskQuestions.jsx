@@ -5,7 +5,7 @@ import { TextInput, Text, Button, Appbar, useTheme } from 'react-native-paper';
 import Loading from '../components/Loading';
 import GeneralHeader from '../components/GeneralHeader';
 
-const AskQuestions = ({route}) => {
+const AskQuestions = ({ route }) => {
 
     console.log(route.params)
     const [text, setText] = useState('');
@@ -15,21 +15,22 @@ const AskQuestions = ({route}) => {
     const [loading, setLoading] = useState(false);
 
     const genAI = new GoogleGenerativeAI("AIzaSyAmf5o7tzb0Nq9K9eS3m2HXX7nSrBZokwg");
-    const model = genAI.getGenerativeModel({ model: "gemini-pro", 'safetySettings': {threshold: HarmBlockThreshold.BLOCK_NONE, category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT}});
+    const model = genAI.getGenerativeModel({ model: "gemini-1.0-pro", 'safetySettings': { threshold: HarmBlockThreshold.BLOCK_NONE, category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT } });
 
     useEffect(() => {
+        console.log("Hello")
         async function startQuestion() {
-           
-        if (route.params){
-            console.log(route.params.disease)
 
-            if (route.params.disease){
-                setText("What are the symptoms, causes, and possible treaments of " +  route.params.disease);
+            if (route.params) {
+                console.log(route.params.disease)
+
+                if (route.params.disease) {
+                    setText("What are the symptoms, causes, and possible treaments of " + route.params.disease);
+                }
             }
         }
-    }
-    startQuestion();
-    }), [route.params];
+        startQuestion();
+    }), [];
 
     // useEffect(() => {
     //     const getSession = async () => {
@@ -47,22 +48,22 @@ const AskQuestions = ({route}) => {
     const sendMessage = async () => {
         if (text.trim().length > 0) {
             console.log(text)
-            
+
             // Simulate a response
             receiveMessage(text);
             setText('');
         }
     };
-    
+
     const receiveMessage = async (text) => {
         try {
             // Assuming you might want to use 'text' to generate or fetch a response
             console.log(text);
             setLoading(true);
-            
+
             const response = await model.generateContent("Do not answer questions that are not related to skin problems or it's treaments, causes or medications." + text);
             const result = await response.response.text();
-            
+
             setMessages(prevMessages => [...prevMessages, { id: prevMessages.length, text, sender: 'user' }]);
             setMessages(prevMessages => [...prevMessages, { id: prevMessages.length, text: result, sender: 'bot' }]);
         } catch (error) {
@@ -73,8 +74,8 @@ const AskQuestions = ({route}) => {
             setLoading(false);
         }
     }
-    
-    
+
+
 
 
     return (
@@ -120,7 +121,7 @@ const AskQuestions = ({route}) => {
                     ))}
                 </ScrollView>
 
-                {loading? <Loading /> : ''} 
+                {loading ? <Loading /> : ''}
                 <View style={{ flexDirection: 'row', padding: 8, height: 'auto' }}>
                     <TextInput
                         mode="outlined"

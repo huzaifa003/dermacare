@@ -1,28 +1,34 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { auth } from '../Connection/DB';
+import { useNavigation } from '@react-navigation/native';
 
 const Header = () => {
+
+  const navigation = useNavigation();
   return (
- 
-      <SafeAreaView edges={['top', 'left', 'right']} style={styles.container}>
-        <View style={styles.logoContainer}>
-          <Image
-            style={styles.logo}
-            source={require('../../assets/Vector.png')}
-            resizeMode="contain"
-          />
-          <Text style={styles.title}>DermaCare</Text>
-        </View>
-        <View style={styles.avatarContainer}>
+
+    <SafeAreaView edges={['top', 'left', 'right']} style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image
+          style={styles.logo}
+          source={require('../../assets/Vector.png')}
+          resizeMode="contain"
+        />
+        <Text style={styles.title}>DermaCare</Text>
+      </View>
+      <TouchableOpacity onPress={() => navigation.navigate("Settings")} style={styles.avatarContainer} >
+        <View style={styles.avatarContainer} >
           <Image
             style={styles.avatar}
-            source={require('../../assets/avatar.png')}
+            source={auth.currentUser.photoURL ? { uri: auth.currentUser.photoURL } : require('../../assets/avatar.png')}
             resizeMode="cover"
           />
         </View>
-      </SafeAreaView>
- 
+      </TouchableOpacity>
+    </SafeAreaView>
+
   )
 }
 

@@ -22,22 +22,23 @@ const ReportPosting = () => {
     const [isSkin, setIsSkin] = useState(true);
     const navigation = useNavigation();
     
+
     const generative = new GoogleGenerativeAI("AIzaSyAmf5o7tzb0Nq9K9eS3m2HXX7nSrBZokwg");
-    const model = generative.getGenerativeModel({ model: "gemini-pro-vision" });
+    const model = generative.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     const geminiContent = async () => {
         try {
             setLoading(true);
             const prompt = "Please detect any human skin in the image, if the image is of human skin the response should be true, else the response should be false.";
             const image = {
-                inlineData:{
+                inlineData: {
                     data: base64,
                     mimeType: 'image/jpeg'
                 }
             }
             const response = await model.generateContent([prompt, image]);
             const result = await response.response.text();
-            if (result.includes("false")){
+            if (result.includes("false")) {
                 alert("Please upload an image of human skin");
                 setIsSkin(false);
                 return;
@@ -58,7 +59,7 @@ const ReportPosting = () => {
             setLoading(false);
         }
 
-        
+
     };
 
     useEffect(() => {
@@ -75,7 +76,7 @@ const ReportPosting = () => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const handleCaptureImage = async () => {
-        
+
         const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
         console.log('Camera permission:', permissionResult);
 
@@ -91,7 +92,7 @@ const ReportPosting = () => {
             base64: true,
         });
 
-        
+
         if (!pickerResult.canceled) {
             // console.log(pickerResult.assets[0]);
             setBase64(pickerResult.assets[0].base64);
@@ -115,9 +116,9 @@ const ReportPosting = () => {
             "mediaTypes": "Images",
             "presentationStyle": "overFullScreen",
             base64: true,
-            
+
             quality: 1,
-            
+
         });
 
         if (!result.canceled) {
@@ -136,7 +137,7 @@ const ReportPosting = () => {
             const imageStorageRef = storageRef(storage, path);
             console.log(imageStorageRef);
             try {
-                
+
                 const response = await fetch(image);
 
 
@@ -180,48 +181,48 @@ const ReportPosting = () => {
 
     return (
         <>
-        {/* <GeneralHeader title="Report Posting" /> */}
-        <View style={styles.container}>
-            
-            <Provider>
-            {loading ? <Loading /> : null}
+            {/* <GeneralHeader title="Report Posting" /> */}
+            <View style={styles.container}>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Enter description"
-                multiline
-                numberOfLines={4}
-                onChangeText={setDescription}
-                value={description}
-            />
+                <Provider>
+                    {loading ? <Loading /> : null}
 
-            <View style={{ 'flexDirection': 'row', 'justifyContent': 'space-between'}}>
-            <Button icon={'image'} mode='elevated'  onPress={handleChoosePhoto}>
-                Choose Photo
-            </Button>
-            
-            <Button icon={'camera'} mode='elevated'  onPress={handleCaptureImage}>
-                Take Photo
-            </Button>
-            
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter description"
+                        multiline
+                        numberOfLines={4}
+                        onChangeText={setDescription}
+                        value={description}
+                    />
 
+                    <View style={{ 'flexDirection': 'row', justifyContent: 'space-between', flexBasis: 'auto', alignContent: 'stretch' }}>
+                        <Button style={{ width: '48%' }} icon={'image'} mode='elevated' onPress={handleChoosePhoto}>
+                            Choose Photo
+                        </Button>
+
+                        <Button style={{ width: '48%' }} icon={'camera'} mode='elevated' onPress={handleCaptureImage}>
+                            Take Photo
+                        </Button>
+
+
+                    </View>
+                    <Text />
+
+
+                    {image && (
+                        <Image
+                            source={{ uri: image }}
+                            style={styles.preview}
+                        />
+                    )}
+
+
+                    <Button icon={'send'} mode='contained' onPress={geminiContent}>
+                        Submit Report
+                    </Button>
+                </Provider>
             </View>
-            <Text/>
-
-           
-            {image && (
-                <Image
-                    source={{ uri: image }}
-                    style={styles.preview}
-                />
-            )}
-
-          
-            <Button icon={'send'} mode='contained'  onPress={geminiContent}>
-                Submit Report
-            </Button>
-            </Provider>
-        </View>
         </>
 
     );
@@ -276,7 +277,7 @@ const styles = StyleSheet.create({
         margin: 50,
         borderRadius: 10,
         alignItems: 'center',
-      },
+    },
 });
 
 export default ReportPosting;
