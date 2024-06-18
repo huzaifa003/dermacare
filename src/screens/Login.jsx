@@ -2,13 +2,14 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, SafeAreaView, ScrollView, KeyboardAvoidingView } from 'react-native';
 import tw from 'twrnc';
-import { auth } from '../Connection/DB';
+import { auth, storage } from '../Connection/DB';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { AntDesign } from '@expo/vector-icons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GeneralHeader from '../components/GeneralHeader';
 import { Button, TextInput } from 'react-native-paper';
+import { getDownloadURL, ref } from 'firebase/storage';
 const Login = () => {
   const [isDermaLogin, setIsDermaLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -24,8 +25,13 @@ const Login = () => {
           AsyncStorage.setItem('userType', 'derma');
           AsyncStorage.setItem('email', email);
           AsyncStorage.setItem("uid", auth.currentUser.uid);
-          console.log('User signed in!');
+          if (auth.currentUser.photoURL !== null) {
+            AsyncStorage.setItem('photoURL', auth.currentUser.photoURL);
+          }
+
           navigation.navigate('Derma')
+
+
         })
         .catch(error => {
           if (error.code === 'auth/email-already-in-use') {
