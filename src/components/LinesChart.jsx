@@ -61,8 +61,10 @@ export default LinesChart = ({ data }) => {
     //   ];
     return (
         <View style={{ backgroundColor: '#1A3461', flex: 1 }}>
-            {console.log(lineData)}
-            <LineChart
+            {console.log(lineData)
+            
+            }
+            { lineData && <LineChart
                 
                 
                 initialSpacing={0}
@@ -74,13 +76,13 @@ export default LinesChart = ({ data }) => {
                 textFontSize={12}
                 thickness={5}
                 hideRules
-                
+                isAnimated={false}
                 yAxisColor="#0BA5A4"
                 showVerticalLines
                 verticalLinesColor="rgba(14,164,164,0.5)"
                 xAxisColor="#0BA5A4"
                 color="#0BA5A4"
-            />
+            />}
         </View>
     );
 };
