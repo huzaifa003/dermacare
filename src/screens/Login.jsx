@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, SafeAreaView, ScrollView, KeyboardAvoidingView } from 'react-native';
 import tw from 'twrnc';
 import { auth, storage } from '../Connection/DB';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
 import { AntDesign } from '@expo/vector-icons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -188,7 +188,7 @@ const Login = () => {
 
 
 
-          <TouchableOpacity className='self-end' onPress={() => { }}>
+          <TouchableOpacity className='self-end' onPress={() => { sendPasswordResetEmail(auth, email).then(()=>{ alert("Email Reset Link Sent To Email")}).catch((err)=> alert("There was an error in resetting the password" + err));  }}>
             <Text style={tw`text-blue-600 mb-8 text-right`}>Forgot password?</Text>
           </TouchableOpacity>
 
