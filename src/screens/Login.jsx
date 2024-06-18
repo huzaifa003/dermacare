@@ -5,20 +5,25 @@ import tw from 'twrnc';
 import { auth, storage } from '../Connection/DB';
 import { sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
 import { AntDesign } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GeneralHeader from '../components/GeneralHeader';
 import { Button, TextInput } from 'react-native-paper';
 import { getDownloadURL, ref } from 'firebase/storage';
+import { set } from 'firebase/database';
 const Login = () => {
   const [isDermaLogin, setIsDermaLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mtn, setMtn] = useState('');
-
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation()
 
   const handleLogin = () => {
+    setError('');
+    setLoading(true);
     if (isDermaLogin) {
       signInWithEmailAndPassword(auth, email, password)
         .then(() => {
@@ -35,21 +40,31 @@ const Login = () => {
         })
         .catch(error => {
           if (error.code === 'auth/email-already-in-use') {
+            setError('That email address is already in use!');
             console.log('That email address is already in use!');
           }
           else if (error.code === 'auth/invalid-email') {
+            setError('That email address is invalid!');
             console.log('That email address is invalid!');
           }
           else if (error.code === 'auth/user-not-found') {
+            setError('User not found');
             console.log('User not found');
+
           }
           else if (error.code === 'auth/wrong-password') {
+            setError('Wrong password');
             console.log('Wrong password');
           }
           else {
+            setError('Something went wrong' + error);
             console.error(error);
           }
+        })
+        .finally(() => {
+          setLoading(false);
         });
+
 
 
     } else {
@@ -61,7 +76,34 @@ const Login = () => {
           AsyncStorage.setItem('email', email);
           AsyncStorage.setItem("uid", auth.currentUser.uid);
           navigation.navigate('Patient');
+        })
+        .catch(error => {
+          if (error.code === 'auth/email-already-in-use') {
+            setError('That email address is already in use!');
+            console.log('That email address is already in use!');
+          }
+          else if (error.code === 'auth/invalid-email') {
+            setError('That email address is invalid!');
+            console.log('That email address is invalid!');
+          }
+          else if (error.code === 'auth/user-not-found') {
+            setError('User not found');
+            console.log('User not found');
+
+          }
+          else if (error.code === 'auth/wrong-password') {
+            setError('Wrong password');
+            console.log('Wrong password');
+          }
+          else {
+            setError('Something went wrong' + error);
+            console.error(error);
+          }
+        })
+        .finally(() => {
+          setLoading(false);
         });
+      
     }
   };
 
@@ -77,6 +119,14 @@ const Login = () => {
           />
 
 
+
+          {error !== '' && (
+            <View style={tw`flex-row items-center mb-4`}>
+              <Ionicons name="alert-circle-outline" size={24} color="red" style={tw`ml-2`} />
+              <Text style={tw`text-red-600 font-bold text-lg`}>{error}</Text>
+
+            </View>
+          )}
           {/* Toggle Button */}
           <View style={tw`flex-row mb-4`}>
             <Button
@@ -188,12 +238,13 @@ const Login = () => {
 
 
 
-          <TouchableOpacity className='self-end' onPress={() => { sendPasswordResetEmail(auth, email).then(()=>{ alert("Email Reset Link Sent To Email")}).catch((err)=> alert("There was an error in resetting the password" + err));  }}>
+          <TouchableOpacity className='self-end' onPress={() => { sendPasswordResetEmail(auth, email).then(() => { alert("Email Reset Link Sent To Email") }).catch((err) => alert("There was an error in resetting the password" + err)); }}>
             <Text style={tw`text-blue-600 mb-8 text-right`}>Forgot password?</Text>
           </TouchableOpacity>
 
           <Button
             icon={isDermaLogin ? 'doctor' : 'account'}
+            loading={loading}
             mode='contained'
             onPress={handleLogin}
             style={tw` w-full rounded-lg`}
