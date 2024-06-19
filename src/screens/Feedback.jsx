@@ -3,13 +3,16 @@ import { View, Image, Text, StyleSheet, Linking, ScrollView, ActivityIndicator, 
 import { Button, TextInput, Card } from 'react-native-paper';
 import GeneralHeader from '../components/GeneralHeader';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { db, storage } from '../Connection/DB';
+import { auth, db, storage } from '../Connection/DB';
 import { update, ref as dbRef } from 'firebase/database';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 
 export default function Feedback({ route }) {
     const params = route.params;
+    const [highest, setHighest] = useState(params.highest || '');
+    const [reportId, setReportId] = useState(params.reportId || '');
+    const [patientId, setPatientId] = useState(params.patientId || '');
     const [recommendation, setRecommendation] = useState(params.recommendation || '');
     const [feedback, setFeedback] = useState('');
     const [pdf, setPdf] = useState('');
@@ -19,37 +22,87 @@ export default function Feedback({ route }) {
     const generatePdf = async () => {
         setLoading(true);
         const html = `
-        <html>
-        <head>
-            <style>
-                body { font-family: 'Arial', sans-serif; margin: 20px; }
-                h1, h2 { color: #333; }
-                p { font-size: 16px; color: #666; }
-                img { width: 100%; max-width: 300px; height: auto; margin-top: 10px; }
-                .section { margin-bottom: 20px; }
-            </style>
-        </head>
-        <body>
-            <h1>Feedback Report</h1>
-            <div class="section">
-                <h2>Original Image</h2>
-                <img src="${params.image}">
-            </div>
-            <div class="section">
-                <h2>Segmented Image</h2>
-                <img src="${params.segmented}">
-            </div>
-            <div class="section">
-                <h2>Recommendation</h2>
-                <p>${recommendation}</p>
-            </div>
-            <div class="section">
-                <h2>Feedback</h2>
-                <p>${feedback}</p>
-            </div>
-        </body>
-        </html>
-        `;
+        <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Report</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 40px;
+            background: #fafafa;
+            color: #333;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 0.5em;
+        }
+        h2 {
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.5;
+        }
+        img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            display: block;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+        .section {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Feedback Report</h1>
+    <h2>Report #${reportId} for Patient #${patientId}</h2>
+    <div class="section">
+        <h2>Original Image</h2>
+        <img src="${params.image}">
+    </div>
+    <div class="section">
+        <h2>Segmented Image</h2>
+        <img src="${params.segmented}">
+    </div>
+
+    <div class="section">
+        <h2>Disease Identified</h2>
+        <p>${highest}</p>
+    </div>
+
+    <div class="section">
+        <h2>Recommendation</h2>
+        <p>${recommendation}</p>
+    </div>
+    <div class="section">
+        <h2>Feedback</h2>
+        <p>${feedback}</p>
+    </div>
+
+    <div class="section">
+        <h2>Signed By</h2>
+        <p>${auth.currentUser.email}</p>
+    </div>
+
+
+</body>
+</html>`;
         try {
             const file = await Print.printToFileAsync({ html });
 

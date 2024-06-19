@@ -178,7 +178,7 @@ export default function Classification({ route }) {
                     Recommendation
                 </Button>
 
-                <Button icon={'grease-pencil'} mode="elevated" onPress={() => navigation.navigate('Feedback', { patientId: patientId, reportId: reportId, image: image, segmented: segmented, recommendation: recommendations })}>
+                <Button icon={'grease-pencil'} mode="elevated" onPress={() => navigation.navigate('Feedback', { patientId: patientId, reportId: reportId, image: image, segmented: segmented, recommendation: recommendations, highest: highest })}>
                     Feedback
                 </Button>
 
