@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import {
-  ScrollView, View, Text, Image, StyleSheet, Button, Alert, ActivityIndicator, TouchableOpacity
+  ScrollView, View, Text, Image, StyleSheet, Alert, ActivityIndicator, TouchableOpacity
 } from 'react-native';
+import { Button } from 'react-native-paper';
 import Checkbox from 'expo-checkbox';
 import * as FileSystem from 'expo-file-system';
 import GeneralHeader from '../GeneralHeader';
-
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 const Segmentation = ({ route, navigation }) => {
   const { imageUrl, patientId, reportId } = route.params;
   const [isLoading, setIsLoading] = useState(false);
@@ -81,14 +82,18 @@ const Segmentation = ({ route, navigation }) => {
           )}
           <View style={styles.buttonContainer}>
             <Button
-              title="Generate Segmentation"
+              mode='contained'
+              icon={'image-size-select-large'}
+              
               onPress={uploadImage}
-              color="#4CAF50"
-            />
+              
+            >Generate Segmentation</Button>
+
+            
             {/*returnedImageUrl */ true && (
-              <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('Classify', { 'image': imageUrl, 'segmented': returnedImageUrl, "patientId": patientId , 'reportId': reportId})}>
-                <Text style={styles.nextButtonText}>Proceed to Next Step</Text>
-              </TouchableOpacity>
+              <Button icon={'arrow-right'} mode='contained-tonal' onPress={() => navigation.navigate('Classify', { 'image': imageUrl, 'segmented': returnedImageUrl, "patientId": patientId , 'reportId': reportId})}>
+                <Text>Proceed to Next Step</Text>
+              </Button>
             )}
           </View>
           {isLoading && (
@@ -126,16 +131,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    width: '100%',
-    marginBottom: 20,
+    gap: 10,
+    margin: 10
+    
   },
-  nextButton: {
-    backgroundColor: '#4CAF50',
-    padding: 10,
-    borderRadius: 5,
-  },
+
   nextButtonText: {
     color: '#ffffff',
   },
