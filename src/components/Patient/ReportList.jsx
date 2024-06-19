@@ -20,9 +20,10 @@ import { auth, db } from '../../Connection/DB';
 import { get, ref } from 'firebase/database';
 import { useNavigation } from '@react-navigation/native';
 import GeneralHeader from '../GeneralHeader';
-
+import tw from 'twrnc';
 // Reusable Report Card Component
 const ReportCard = ({ report, uid }) => {
+  
   const navigation = useNavigation();
 
   return (
@@ -121,6 +122,8 @@ const styles = StyleSheet.create({
 
 // Main Component that uses the Report Card
 const ReportList = () => {
+  const [filteredReports, setFilteredReports] = useState([]);
+  const [statusFilter, setStatusFilter] = useState('approved'); // Default filter
   const [reports, setReports] = useState([]);
   const [refreshing, setRefreshing] = useState(true);
   const [uid, setUid] = useState('');
@@ -145,6 +148,7 @@ const ReportList = () => {
   }, [uid]);
 
 
+  
   const loadReports = () => {
     if (!uid) return; // If no UID, exit the function
     setRefreshing(true);
@@ -156,8 +160,9 @@ const ReportList = () => {
           snapshot.forEach((childSnapshot) => {
             fetchedReports.push({ id: childSnapshot.key, ...childSnapshot.val() });
           });
-          console.log(fetchedReports);
+          // console.log(fetchedReports);
           setReports(fetchedReports);
+          setFilteredReports(fetchedReports);
         } else {
           console.log('No data available');
           setReports([]); // Clear reports if none found
@@ -175,6 +180,28 @@ const ReportList = () => {
     loadReports(); // Refresh reports data
   };
 
+  
+  
+
+  useEffect(() => {
+    
+    filterReportsByStatus();
+    console.log("filteredReports", filteredReports  )
+  }, [statusFilter, reports]);
+
+  const filterReportsByStatus = () => {
+    // console.log("---------------------------------------")
+    setFilteredReports(
+      reports.filter((report) =>
+        statusFilter === 'approved'
+          ? report.status.toLowerCase() == 'approved'
+          : report.status.toLowerCase() != 'approved'
+      )
+    );
+  }
+
+
+
   return (
     <>
      
@@ -184,6 +211,35 @@ const ReportList = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
+        <View style={[tw`flex-row mb-4`, {gap: 10, margin :10}]}>
+        <Button
+            style={[
+              tw`flex-1 p-0 h-10`,
+              statusFilter === 'approved' ? tw`bg-purple-600` : tw`bg-white`,
+              {elevation: 5}
+            ]}
+            mode="outlined"
+            onPress={() => setStatusFilter('approved')}
+          >
+            <Text style={tw`text-center font-semibold ${statusFilter === 'approved' ? 'text-white' : 'text-black'}`}>
+              Approved
+            </Text>
+          </Button>
+          <Button
+            style={[
+              tw`flex-1 p-0 h-10`,
+              statusFilter === 'pending' ? tw`bg-purple-600` : tw`bg-white`
+            ]}
+            mode="outlined"
+            onPress={() => setStatusFilter('pending')}
+          >
+            <Text style={tw`text-center font-semibold ${statusFilter === 'pending' ? 'text-white' : 'text-black'}`}>
+              Pending
+            </Text>
+          </Button>
+        </View>
+
+
         <View>
           {refreshing ? (
             <ActivityIndicator
@@ -193,7 +249,9 @@ const ReportList = () => {
               style={styles.indicator}
             />
           ) : reports.length > 0 ? (
-            reports.map((report) => <ReportCard key={report.id} report={report} uid={uid} />)
+
+            filteredReports.length === 0 ? <Text style={[tw`text-red-600 font-bold text-lg`, {"alignSelf": 'center'}]}> No Report Found</Text>  :  filteredReports.map((report) => <ReportCard key={report.id} report={report} uid={uid} />)
+            
           ) : (
             <Text style={styles.noData}>No reports available.</Text>
           )}

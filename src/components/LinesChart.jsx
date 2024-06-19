@@ -1,10 +1,10 @@
 import { LineChart } from "react-native-gifted-charts"
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 
 export default LinesChart = ({ data }) => {
     console.log(data)
-    const [lineData, setLineData] = useState(data)
+    const [lineData, setLineData] = useState(data);
     function formatVeryCompactDateTime(timestamp) {
         // Create a Date object from the timestamp
         var date = new Date(timestamp);
@@ -64,6 +64,7 @@ export default LinesChart = ({ data }) => {
             {console.log(lineData)
             
             }
+
             { lineData && <LineChart
                 
                 
@@ -76,7 +77,7 @@ export default LinesChart = ({ data }) => {
                 textFontSize={12}
                 thickness={5}
                 hideRules
-                isAnimated={false}
+                isAnimated={Platform.OS !== 'ios' ? true : false}
                 yAxisColor="#0BA5A4"
                 showVerticalLines
                 verticalLinesColor="rgba(14,164,164,0.5)"

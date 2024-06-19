@@ -37,6 +37,7 @@ const App = () => {
         }}
       >
 
+        {/* <Stack.Screen name="ReportList" component={ReportList} /> */}
         <Stack.Screen name="Onboarding" component={Onboarding} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="AddProfile" component={AddProfile} />
