@@ -253,7 +253,7 @@ const ReportList = () => {
             filteredReports.length === 0 ? <Text style={[tw`text-red-600 font-bold text-lg`, {"alignSelf": 'center'}]}> No Report Found</Text>  :  filteredReports.map((report) => <ReportCard key={report.id} report={report} uid={uid} />)
             
           ) : (
-            <Text style={styles.noData}>No reports available.</Text>
+            <Text style={[tw`text-red-600 font-bold text-lg`, {"alignSelf": 'center'}]}> No Report Found</Text>
           )}
         </View>
       </ScrollView>

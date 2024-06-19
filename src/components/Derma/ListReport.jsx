@@ -83,13 +83,13 @@ const ListReport = ({ route, navigation }) => {
       <GeneralHeader title={'Reports'} />
 
       <View style={styles.container}>
-        <View style={tw`flex-row mb-4`}>
+        <View style={[tw`flex-row mb-4`, {gap: 10}]}>
         <Button
             style={[
               tw`flex-1 p-0 h-10`,
               statusFilter === 'approved' ? tw`bg-purple-600` : tw`bg-white`
             ]}
-            mode="contained"
+            mode="outlined"
             onPress={() => setStatusFilter('approved')}
           >
             <Text style={tw`text-center font-semibold ${statusFilter === 'approved' ? 'text-white' : 'text-black'}`}>
@@ -101,7 +101,7 @@ const ListReport = ({ route, navigation }) => {
               tw`flex-1 p-0 h-10`,
               statusFilter === 'pending' ? tw`bg-purple-600` : tw`bg-white`
             ]}
-            mode="contained"
+            mode="outlined"
             onPress={() => setStatusFilter('pending')}
           >
             <Text style={tw`text-center font-semibold ${statusFilter === 'pending' ? 'text-white' : 'text-black'}`}>
@@ -114,33 +114,40 @@ const ListReport = ({ route, navigation }) => {
           style={styles.scrollView}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
-          {filteredReports.length < 1 && <Text>No reports available.</Text>}
+          {filteredReports.length < 1 && <Text style={[tw`text-red-600 font-bold text-lg`, {"alignSelf": 'center'}]}> No Report Found</Text>}
 
           {filteredReports.map((report) => (
             <Card key={report.id} style={styles.card}>
-              <Card.Title title={`Report ${report.id}`} />
+              <Card.Title title={ <Text> Report# {report.id} </Text>} 
+                left={(props) => <Image source={{ uri: report.image }} style={{ width: 50, height: 50, borderRadius: 20 }} />}
+              
+              />
               <Card.Content>
                 <View style={{ flexDirection: 'row' }}>
-                  <Image source={{ uri: report.image }} style={{ width: 50, height: 50, marginRight: 10 }} />
+                  {/* <Image source={{ uri: report.image }} style={{ width: 50, height: 50, marginRight: 10 }} /> */}
                   <View>
-                    <Text style={styles.descriptionText}>{report.description}</Text>
-                    <Text style={[styles.statusText, { color: getStatusColor(report.status) }]}>
-                      Status: {report.status}
+                    <Text style={[styles.descriptionText, {fontWeight: 'bold'}]}> Description:  <Text style={{ fontWeight: 'normal' }}> {report.description} </Text> </Text>
+                    <Text style={[styles.statusText, {  fontWeight: 'bold',  color: 'black' }]}>
+                      Status: <Text style={{color: getStatusColor(report.status)}}> {report.status} </Text>
                     </Text>
                   </View>
                 </View>
               </Card.Content>
-              <Card.Actions style={styles.actions}>
-              
-                  <Button mode='contained'
+              <Card.Actions >
+
+
+                  {report.status.toLowerCase() !== 'approved' ? (
+                  <Button mode='contained-tonal'
+                    icon={'image-search'}
                     onPress={() => navigation.navigate('Segmentation', { reportId: report.id, imageUrl: report.image, patientId: uid })}
-                  textColor="#FFFFFF">Process Report</Button>
-               
+                  >Process Report</Button>
+                  ) : <Button mode='contained-tonal' icon={'information'}   onPress={() => handleViewDetails(report.id)} >View Details</Button>}
                 
-                  <Button   onPress={() => handleViewDetails(report.id)} textColor="#FFFFFF">View Details</Button>
+                  {/* { report.status.toLowerCase() === 'approved' ?  : "" } */}
                 
                 
                   <Button
+                   icon={'chat'}
                    onPress={() => navigation.navigate('Chat', { reportId: report.id, patientId: uid })}
                   textColor="#FFFFFF">Chat</Button>
                 
@@ -170,24 +177,31 @@ const styles = StyleSheet.create({
     elevation: 4,
     borderRadius: 8,
   },
+
+
+
+
+
   descriptionText: {
     fontSize: 16,
     marginBottom: 10,
     color: '#495057',
   },
   statusText: {
-    fontSize: 16,
+    alignSelf: 'center',
+    fontSize: 20,
     paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingHorizontal: 5,
     color: '#FFFFFF',
     borderRadius: 5,
     overflow: 'hidden',
+    fontWeight: 'bold',
   },
-  actions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 10,
-  },
+  // actions: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   padding: 10,
+  // },
   button: {
     flex: 1,
     marginLeft: 5,
