@@ -76,11 +76,7 @@ export default function Feedback({ route }) {
         <h2>Original Image</h2>
         <img src="${params.image}">
     </div>
-    <div class="section">
-        <h2>Segmented Image</h2>
-        <img src="${params.segmented}">
-    </div>
-
+    
     <div class="section">
         <h2>Disease Identified</h2>
         <p>${highest}</p>
@@ -139,7 +135,7 @@ export default function Feedback({ route }) {
                         <Card.Title title="Patient Images" />
                         <Card.Content>
                             <Image source={{ uri: params.image }} style={styles.image} />
-                            <Image source={{ uri: params.segmented }} style={styles.image} />
+                            {/* <Image source={{ uri: params.segmented }} style={styles.image} /> */}
                         </Card.Content>
                     </Card>
                     <TextInput
