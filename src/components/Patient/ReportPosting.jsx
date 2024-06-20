@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { ref as dbRef, set } from 'firebase/database';
 import { ref as storageRef, uploadString, getDownloadURL, uploadBytes } from 'firebase/storage';
@@ -7,7 +7,7 @@ import { auth, db, storage } from '../../Connection/DB';
 import { onAuthStateChanged } from 'firebase/auth';
 import Loading from '../Loading';
 import { useNavigation } from '@react-navigation/native';
-import { Button, FAB, Modal, Portal, Provider } from 'react-native-paper';
+import { Button, FAB, Modal, Portal, Provider, Surface, TextInput} from 'react-native-paper';
 import GeneralHeader from '../GeneralHeader';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
@@ -188,10 +188,10 @@ const ReportPosting = () => {
                     {loading ? <Loading /> : null}
 
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input]}
                         placeholder="Enter description"
-                        multiline
-                        numberOfLines={4}
+                        multiline={true}
+
                         onChangeText={setDescription}
                         value={description}
                     />
@@ -211,10 +211,12 @@ const ReportPosting = () => {
 
 
                     {image && (
+                        <Surface style={{alignItems:'center', padding: 10, margin: 10, borderRadius: 10, elevation: 5}}>
                         <Image
                             source={{ uri: image }}
                             style={styles.preview}
                         />
+                        </Surface>
                     )}
 
 
@@ -243,11 +245,11 @@ const styles = StyleSheet.create({
         color: '#333', // Dark gray for better contrast
     },
     input: {
-        height: 100,
+        
         borderColor: '#ddd', // Lighter border color
         borderWidth: 1,
         marginBottom: 20,
-        padding: 10,
+        padding: 5,
         borderRadius: 5, // Rounded corners
         backgroundColor: '#fff', // White background for the input
     },
