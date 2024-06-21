@@ -1,26 +1,65 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Card, Button, Text } from 'react-native-paper';
 
 const DiseaseInformation = ({ disease, image }) => {
     const navigation = useNavigation();
     
     return (
-        <Card>
-            <View style={{backgroundColor: '#e5c3eb', borderRadius: 5}}>
-                <Text style={{ marginLeft: 'auto', marginRight: 'auto', padding: 20, width:'auto', fontSize: 25 }} variant='titleMedium'> {disease} </Text>
+        <Card style={styles.card}>
+            <View style={styles.header}>
+                <Text style={styles.headerText}>{disease}</Text>
             </View>
-            <Text/>
-            <Card.Content>
-                <Card.Cover source={image} />
-
-            </Card.Content>
-            <Card.Actions>
-                <Button icon={'chat-question-outline'} style={{width: '100%'}} mode='contained' onPress={() => navigation.navigate("Ask Questions", {disease: disease})}>Ask Questions</Button>
+            <Card.Cover style={styles.cover} source={image} />
+            <Card.Actions style={styles.actions}>
+                <Button
+                    icon="chat-question-outline"
+                    mode="contained"
+                    onPress={() => navigation.navigate("Ask Questions", { disease: disease })}
+                    style={styles.button}
+                    labelStyle={styles.buttonLabel}>
+                    Ask Questions
+                </Button>
             </Card.Actions>
         </Card>
     );
 }
+
+const styles = StyleSheet.create({
+    card: {
+        borderRadius: 10,
+        overflow: 'hidden',
+        margin: 10,
+        elevation: 4,
+    },
+    header: {
+        backgroundColor: '#8a4f9e',
+        padding: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    headerText: {
+        color: '#fff',
+        fontSize: 22,
+        fontWeight: 'bold',
+    },
+    cover: {
+        height: 200,
+        borderRadius: 0,
+    },
+    actions: {
+        justifyContent: 'center',
+        padding: 10,
+    },
+    button: {
+        // backgroundColor: '#6c63ff',
+        paddingVertical: 8,
+    },
+    buttonLabel: {
+        color: '#ffffff',
+        fontSize: 18,
+    }
+});
 
 export default DiseaseInformation;

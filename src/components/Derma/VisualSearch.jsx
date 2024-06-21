@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Image, Alert, ScrollView, Linking, TouchableOpacity } from 'react-native';
-import { FAB, Portal, Provider, Modal, Button, Card, Title, Paragraph, Text, ActivityIndicator, PaperProvider, Divider } from 'react-native-paper';
+import { FAB, Portal, Provider, Modal, Button, Card, Title, Paragraph, Text, ActivityIndicator, PaperProvider, Divider, Surface } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import GeneralHeader from '../GeneralHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRef } from 'react';
 
-const VisualSearch = ({route}) => {
+const VisualSearch = ({ route }) => {
   const scrollViewRef = useRef();  // Add this line
   const [showScrollToTop, setShowScrollToTop] = useState(false)
 
@@ -33,13 +33,13 @@ const VisualSearch = ({route}) => {
 
   useEffect(() => {
 
-  if (route.params?.image) {
-    console.log('Image:', route.params.image);
-    const uri = Image.resolveAssetSource(route.params.image).uri;
-    setSelectedImage(uri);
-  }
+    if (route.params?.image) {
+      console.log('Image:', route.params.image);
+      const uri = Image.resolveAssetSource(route.params.image).uri;
+      setSelectedImage(uri);
+    }
   }, [route.params?.image]);
-  
+
 
 
   const uploadImage = async (imageUri) => {
@@ -58,12 +58,12 @@ const VisualSearch = ({route}) => {
     console.log(blob);
 
     let updatedFileType = fileType;
-    
+
     if (fileType.includes('&')) {
       updatedFileType = fileType.split("&")[0];
     }
 
-    
+
     console.log(updatedFileType)
     const formData = new FormData();
     formData.append('image', {
@@ -188,37 +188,62 @@ const VisualSearch = ({route}) => {
           }
         }}
       />
-      
+
       <ScrollView
         ref={scrollViewRef}
         onScroll={onScroll}
         scrollEventThrottle={5} // 16ms is 60fps
       >
         <View style={styles.container}>
-          {selectedImage && <Image source={{ uri: selectedImage }} style={styles.image} resizeMode="cover" />}
+          {selectedImage ? (
+            <Surface style={styles.surface}>
+              <Image source={{ uri: selectedImage }} style={styles.image} resizeMode="cover" />
+              <Button
+                loading={loading}
+                mode='text'
+                icon="chart-timeline-variant-shimmer"
+                onPress={async () => { await uploadImage(selectedImage) }}
+                style={styles.button}
+              >
+                {loading ? 'Generating' : 'Generate Similar Images'}
+              </Button>
+            </Surface>
+          ) : (
+            <Text style={styles.noImageText} variant="headlineMedium">
+              No Image Selected
+            </Text>
+          )}
 
-          
-          {selectedImage? <Button loading={loading} mode='contained-tonal' icon={'chart-timeline-variant-shimmer'} onPress={async () => { await uploadImage(selectedImage) }}>{loading? 'Generating': 'Generate'} Similar Images</Button> : <Text>No Image Selected</Text>} 
-
-          
-          <Divider  bold={true} theme={{colors: {primary:'green'}}} style={{ marginVertical: 10, zIndex: 2, color:'blue', height:5 }} />   
 
 
 
-          {loading ? <Text/> :
+
+          <Divider bold={true} theme={{ colors: { primary: 'green' } }} style={{ marginVertical: 10, zIndex: 2, color: 'blue', height: 5 }} />
+
+
+
+          {loading ? <Text /> :
 
             <ScrollView >
-              {images.length>0 ? <Text style={{'color': 'purple', fontWeight: '400', marginLeft: 'auto', marginRight:'auto', borderTopWidth: 1, borderBottomWidth: 1, paddingVertical: 4}} variant="headlineMedium">Similar Images</Text> : ''} 
-              <Text/>
-              
+              {images.length > 0 ? (
+                <View style={styles.headerContainer}>
+                  <View style={styles.line} />
+                  <Text style={styles.similarImagesText} variant="headlineMedium">
+                    Similar Images
+                  </Text>
+                  <View style={styles.line} />
+                </View>
+              ): <Text style={styles.noImageText} variant="headlineMedium"> No similar images found</Text>}
+              <Text />
+
               {images.map((item, index) => (
                 <>
                   <Card key={index} style={styles.card}>
-                    {item.contentUrl? (
+                    {item.contentUrl ? (
                       <Card.Cover source={{ uri: item.contentUrl }} />
-                    ): item.thumbnailUrl? (
+                    ) : item.thumbnailUrl ? (
                       <Card.Cover source={{ uri: item.thumbnailUrl }} />
-                    ): <Text>Image not available</Text>}
+                    ) : <Text>Image not available</Text>}
 
                     <Card.Content>
                       <Title>{item.name}</Title>
@@ -278,11 +303,21 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#FFFFFF',
   },
+  surface: {
+    width: '100%',
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 20,
+    elevation: 2,
+  },
   image: {
     width: '100%',
-    height: 300,
-    marginBottom: 20,
+    height: 250,
     borderRadius: 10,
+  },
+  button: {
+    marginTop: 10,
+    // backgroundColor: '#6c63ff',
   },
   processButton: {
     marginTop: 20,
@@ -310,7 +345,54 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     elevation: 3,
   },
-  
+  noImageText: {
+    color: 'purple',
+    fontWeight: '400',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    paddingVertical: 4,
+    textAlign: 'center',
+  },
+  similarImagesText: {
+    color: 'purple',
+    fontWeight: '400',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    paddingVertical: 4,
+    textAlign: 'center',
+  },
+  headerContainer: {
+        
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 20,
+        paddingVertical: 10,
+        backgroundColor: '#f3e5f5',
+        borderRadius: 10,
+        elevation: 3,
+        
+        width:'100%'
+    },
+    similarImagesText: {
+        color: 'purple',
+        fontWeight: '700',
+        paddingHorizontal: 15,
+        fontSize: 18,
+    },
+    line: {
+        flex: 1,
+        height: 2,
+        backgroundColor: 'purple',
+        borderRadius: 1,
+    },
+
+
+
 });
 
 export default VisualSearch;
