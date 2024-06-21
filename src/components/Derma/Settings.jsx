@@ -2,12 +2,14 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { Avatar, List, Button, Divider, TextInput } from "react-native-paper";
-import { auth, storage } from "../../Connection/DB";
+import { auth, db, storage } from "../../Connection/DB";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import * as ImagePicker from 'expo-image-picker';
 import { updatePassword, updateProfile } from "firebase/auth";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { update, ref as databaseRef } from "firebase/database";
+
 const Settings = () => {
   const navigation = useNavigation()
   const [userData, setUserData] = useState({});
@@ -124,9 +126,19 @@ const Settings = () => {
           console.error(error);
         });
 
-
-
+      const refStorage = databaseRef(db, `patients/${uid}/profile`);
+      update(refStorage, {
+        avatarUrl: downloadableLink,
+      }).then(() => {
+        console.log('Profile updated successfully in realtime');
+      })
+      .catch((error) => {
+        console.error(error);
+      })
     }
+
+
+
   }
 
   const changePassword = () => {
@@ -202,7 +214,7 @@ const Settings = () => {
       </List.Section>
       <Divider />
       <List.Section>
-        
+
         <Button
 
 

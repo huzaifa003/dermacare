@@ -57,6 +57,10 @@ const Login = () => {
             setError('Wrong password');
             console.log('Wrong password');
           }
+          else if (error.code === 'auth/invalid-credential') {
+            setError('Invalid Credentials');
+            console.log('Invalid Credentials');
+          }
           else {
             setError('Something went wrong' + error);
             console.error(error);
@@ -95,6 +99,10 @@ const Login = () => {
           else if (error.code === 'auth/wrong-password') {
             setError('Wrong password');
             console.log('Wrong password');
+          }
+          else if (error.code === 'auth/invalid-credential') {
+            setError('Invalid Credentials');
+            console.log('Invalid Credentials');
           }
           else {
             setError('Something went wrong' + error);
@@ -196,16 +204,16 @@ const Login = () => {
                   style={tw`bg-white w-full mb-4  `}
                 />
 
-                
 
-                  <IconButton
-                    icon={passwordVisible ? 'eye' : 'eye-off'}
-                    size={24}
-                    color={mtn === "derm123" || mtn === "DERM123" ? "green" : "red"}
-                    style={[tw`absolute right-0 top-2`, { zIndex: 5, alignSelf:'center' }]}  // Position the icon inside the TextInput
-                    onPress={() => setPasswordVisible(!passwordVisible)}
-                  />
-                
+
+                <IconButton
+                  icon={passwordVisible ? 'eye' : 'eye-off'}
+                  size={24}
+                  color={mtn === "derm123" || mtn === "DERM123" ? "green" : "red"}
+                  style={[tw`absolute right-0 top-2`, { zIndex: 5, alignSelf: 'center' }]}  // Position the icon inside the TextInput
+                  onPress={() => setPasswordVisible(!passwordVisible)}
+                />
+
 
 
               </View>
