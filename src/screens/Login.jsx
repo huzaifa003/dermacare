@@ -9,13 +9,14 @@ import { Ionicons } from '@expo/vector-icons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GeneralHeader from '../components/GeneralHeader';
-import { Button, TextInput } from 'react-native-paper';
+import { Button, IconButton, TextInput } from 'react-native-paper';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { set } from 'firebase/database';
 const Login = () => {
   const [isDermaLogin, setIsDermaLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [mtn, setMtn] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -103,7 +104,7 @@ const Login = () => {
         .finally(() => {
           setLoading(false);
         });
-      
+
     }
   };
 
@@ -183,17 +184,33 @@ const Login = () => {
                 autoCapitalize="none"
                 style={tw`bg-white w-full mb-4  `}
               />
+              <View style={tw`flex-row mb-4`}>
+                <TextInput
+                  mode='outlined'
+                  label={'Password'}
+                  value={password}
+                  onChangeText={setPassword}
+                  placeholder="Password"
+                  secureTextEntry={passwordVisible}
+                  autoCapitalize="none"
+                  style={tw`bg-white w-full mb-4  `}
+                />
 
-              <TextInput
-                mode='outlined'
-                label={'Password'}
-                value={password}
-                onChangeText={setPassword}
-                placeholder="Password"
-                secureTextEntry={true}
-                autoCapitalize="none"
-                style={tw`bg-white w-full mb-4  `}
-              />
+                
+
+                  <IconButton
+                    icon={passwordVisible ? 'eye' : 'eye-off'}
+                    size={24}
+                    color={mtn === "derm123" || mtn === "DERM123" ? "green" : "red"}
+                    style={[tw`absolute right-0 top-2`, { zIndex: 5, alignSelf:'center' }]}  // Position the icon inside the TextInput
+                    onPress={() => setPasswordVisible(!passwordVisible)}
+                  />
+                
+
+
+              </View>
+
+
             </>
 
 
