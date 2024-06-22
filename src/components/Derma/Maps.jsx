@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useNavigation } from '@react-navigation/native';
+import GeneralHeader from '../GeneralHeader';
 
 
 const Maps = () => {
@@ -30,6 +31,8 @@ const Maps = () => {
   };
 
   return (
+    <>
+    <GeneralHeader title="Maps" />
     <View style={styles.container}>
       {location ? (
         <MapView
@@ -59,8 +62,11 @@ const Maps = () => {
         <Text style={styles.overlayButtonText}>View Live Weather Data</Text>
       </TouchableOpacity>
     </View>
+    </>
   );
+  
 };
+
 
 const styles = StyleSheet.create({
   container: {

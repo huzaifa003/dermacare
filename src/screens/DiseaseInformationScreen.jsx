@@ -367,9 +367,9 @@ const dermatologicalConditionsImages = [
 
 
 
-  const xyz = "../../assets/SameFileFitz/xeroderma pigmentosum/disease.jpg";
+const xyz = "../../assets/SameFileFitz/xeroderma pigmentosum/disease.jpg";
 const DiseaseInformationScreen = () => {
-    const navigation = useNavigation(); 
+    const navigation = useNavigation();
     useEffect(() => {
         console.log("DiseaseInformationScreen mounted");
         dermatologicalConditions.forEach(disease => {
@@ -378,7 +378,7 @@ const DiseaseInformationScreen = () => {
         );
 
     }
-    , []);
+        , []);
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredDiseases, setFilteredDiseases] = useState(dermatologicalConditions);
 
@@ -391,32 +391,35 @@ const DiseaseInformationScreen = () => {
             setFilteredDiseases(dermatologicalConditions);
         }
     };
-    
 
 
 
-    
+
+
     return (
-        <View style={{ flex: 1 }}>
-            {/* <GeneralHeader title="Disease Information" /> */}
-            <Searchbar
-                mode='view'
-                placeholder="Search Diseases"
-                onChangeText={onChangeSearch}
-                value={searchQuery}
-            />
-            <Text />
-            {filteredDiseases.length === 0 && <Text>No diseases found</Text>}
-            <ScrollView style={{margin: 4, marginHorizontal: 20}}>
-                {filteredDiseases.map((disease, index) => (
-                    <View>
-                        
-                        <TouchableOpacity onPress={()=>navigation.navigate("Visual Search", {"image": dermatologicalConditionsImages[index]})}><DiseaseInformation key={index} disease={disease} image={dermatologicalConditionsImages[index]} /></TouchableOpacity>
-                        <Text />
-                    </View>
-                ))}
-            </ScrollView>
-        </View>
+        <>
+            <GeneralHeader title="Disease Information" />
+            <View style={{ flex: 1 }}>
+                {/* <GeneralHeader title="Disease Information" /> */}
+                <Searchbar
+                    mode='view'
+                    placeholder="Search Diseases"
+                    onChangeText={onChangeSearch}
+                    value={searchQuery}
+                />
+                <Text />
+                {filteredDiseases.length === 0 && <Text>No diseases found</Text>}
+                <ScrollView style={{ margin: 4, marginHorizontal: 20 }}>
+                    {filteredDiseases.map((disease, index) => (
+                        <View>
+
+                            <TouchableOpacity onPress={() => navigation.navigate("Visual Search", { "image": dermatologicalConditionsImages[index] })}><DiseaseInformation key={index} disease={disease} image={dermatologicalConditionsImages[index]} /></TouchableOpacity>
+                            <Text />
+                        </View>
+                    ))}
+                </ScrollView>
+            </View>
+        </>
     );
 };
 

@@ -40,9 +40,9 @@ const BottomNavDerma = () => {
       })}
     >
       <Tab.Screen options={{ headerShown: false }} name="Home" component={Home} />
-      <Tab.Screen options={{ headerShown: false }} name="Maps" component={Maps} />
+      {/* <Tab.Screen options={{ headerShown: false }} name="Maps" component={Maps} /> */}
       <Tab.Screen options={{ headerShown: false }} name="AI Chat" component={RAGChat} />
-      <Tab.Screen options={{ headerShown: false }} name="Visual Search" component={VisualSearch} />
+      {/* <Tab.Screen options={{ headerShown: false }} name="Visual Search" component={VisualSearch} /> */}
       <Tab.Screen options={{ headerShown: false }} name="Settings" component={Settings} />
     </Tab.Navigator>
     </>

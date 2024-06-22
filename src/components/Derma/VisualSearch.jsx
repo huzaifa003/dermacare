@@ -173,7 +173,7 @@ const VisualSearch = ({ route }) => {
 
   return (
     <Provider>
-      {/* <GeneralHeader title="Visual Search" /> */}
+       {  <GeneralHeader title="Visual Search" />} 
       <FAB.Group
         style={styles.fab}
         open={false}

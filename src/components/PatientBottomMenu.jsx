@@ -11,6 +11,7 @@ import ReportList from './Patient/ReportList';
 import NewsScreen from '../screens/NewsScreen';
 import DiseaseInformationScreen from '../screens/DiseaseInformationScreen';
 import ListReport from './Derma/ListReport';
+import PatientHome from './PatientHome';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,7 +29,7 @@ const PatientBottomMenu = () => {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Maps') {
             iconName = focused ? 'map' : 'map-outline';
-          } else if (route.name === 'AllReports') {
+          } else if (route.name === 'All Reports') {
             iconName = focused ? 'calendar' : 'calendar-outline';
           } else if (route.name === 'Search Disease') {
             iconName = focused ? 'layers-search' : 'layers-search';
@@ -47,13 +48,13 @@ const PatientBottomMenu = () => {
         tabBarInactiveTintColor: 'gray',
       })}
     >
-      <Tab.Screen options={{ headerShown: false }} name="Home" component={ReportPosting} />
-      <Tab.Screen options={{ headerShown: false }} name="AllReports" component={ListReport} />
-      <Tab.Screen options={{ headerShown: false }} name="Visual Search" component={VisualSearch} />
-      <Tab.Screen options={{ headerShown: false }} name="News" component={NewsScreen} />
-      <Tab.Screen options={{ headerShown: false }} name="Search Disease" component={DiseaseInformationScreen} />
+      <Tab.Screen options={{ headerShown: false }} name="Home" component={PatientHome} />
+      <Tab.Screen options={{ headerShown: false }} name="All Reports" component={ListReport} />
+      {/* <Tab.Screen options={{ headerShown: false }} name="Visual Search" component={VisualSearch} /> */}
+      {/* <Tab.Screen options={{ headerShown: false }} name="News" component={NewsScreen} /> */}
+      {/* <Tab.Screen options={{ headerShown: false }} name="Search Disease" component={DiseaseInformationScreen} /> */}
     
-      <Tab.Screen options={{ headerShown: false }} name="Maps" component={Maps} />
+      {/* <Tab.Screen options={{ headerShown: false }} name="Maps" component={Maps} /> */}
       <Tab.Screen options={{ headerShown: false }} name="Settings" component={Settings} />
     </Tab.Navigator>
     </>

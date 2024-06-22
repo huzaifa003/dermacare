@@ -53,6 +53,7 @@ const NewsScreen = () => {
 
   return (
     <>
+    <GeneralHeader title="News" />
       <ScrollView
         style={styles.container}
         refreshControl={
