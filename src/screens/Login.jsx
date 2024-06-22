@@ -202,7 +202,7 @@ const Login = () => {
                   placeholder="Password"
                   secureTextEntry={passwordVisible}
                   autoCapitalize="none"
-                  style={tw`w-full`}
+                  style={tw`w-full m-4`}
                 />
 
 
@@ -211,7 +211,7 @@ const Login = () => {
                   icon={passwordVisible ? 'eye' : 'eye-off'}
                   size={24}
                   color={mtn === "derm123" || mtn === "DERM123" ? "green" : "red"}
-                  style={[tw`absolute right-0 top-2`, { zIndex: 5, alignSelf: 'center' }]}  // Position the icon inside the TextInput
+                  style={[tw`absolute right-0 right-3 top-5`, { zIndex: 5, alignSelf: 'center' }]}  // Position the icon inside the TextInput
                   onPress={() => setPasswordVisible(!passwordVisible)}
                 />
 
@@ -251,7 +251,7 @@ const Login = () => {
                 placeholder="Password"
                 secureTextEntry={true}
                 autoCapitalize="none"
-                style={tw`w-full`}
+                style={tw`w-full m-4`}
               />
             </>
 
