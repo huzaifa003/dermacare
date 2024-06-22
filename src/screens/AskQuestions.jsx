@@ -4,33 +4,35 @@ import { ScrollView, View, KeyboardAvoidingView, Platform } from 'react-native';
 import { TextInput, Text, Button, Appbar, useTheme } from 'react-native-paper';
 import Loading from '../components/Loading';
 import GeneralHeader from '../components/GeneralHeader';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Markdown from 'react-native-markdown-display';
 
 const AskQuestions = ({ route }) => {
 
     console.log(route.params)
-    const [text, setText] = useState('');
+    const [text, setText] = useState(route.params?.disease ? "What are the symptoms, causes, and possible treaments of " + route.params.disease : '');
     const [messages, setMessages] = useState([]);
     const { colors } = useTheme();
     const [chatSession, setChatSession] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const genAI = new GoogleGenerativeAI("AIzaSyAmf5o7tzb0Nq9K9eS3m2HXX7nSrBZokwg");
-    const model = genAI.getGenerativeModel({ model: "gemini-1.0-pro", 'safetySettings': { threshold: HarmBlockThreshold.BLOCK_NONE, category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT } });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash", 'safetySettings': { threshold: HarmBlockThreshold.BLOCK_NONE, category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT }, "systemInstruction": "Do not answer questions that are not related to skin problems or it's treaments, causes or medications.", generationConfig: {temperature: 0.2, maxOutputTokens: 1000, "response_mime_type"  : "text/plain"} });
 
-    useEffect(() => {
-        console.log("Hello")
-        async function startQuestion() {
+    // useEffect(() => {
+    //     console.log("Hello")
+    //     async function startQuestion() {
 
-            if (route.params) {
-                console.log(route.params.disease)
+    //         if (route.params) {
+    //             console.log(route.params.disease)
 
-                if (route.params.disease) {
-                    setText("What are the symptoms, causes, and possible treaments of " + route.params.disease);
-                }
-            }
-        }
-        startQuestion();
-    }), [];
+    //             if (route.params.disease) {
+    //                 setText("What are the symptoms, causes, and possible treaments of " + route.params.disease);
+    //             }
+    //         }
+    //     }
+    //     startQuestion();
+    // }), [];
 
     // useEffect(() => {
     //     const getSession = async () => {
@@ -61,7 +63,7 @@ const AskQuestions = ({ route }) => {
             console.log(text);
             setLoading(true);
 
-            const response = await model.generateContent("Do not answer questions that are not related to skin problems or it's treaments, causes or medications." + text);
+            const response = await model.generateContent(text);
             const result = await response.response.text();
 
             setMessages(prevMessages => [...prevMessages, { id: prevMessages.length, text, sender: 'user' }]);
@@ -85,6 +87,7 @@ const AskQuestions = ({ route }) => {
                 behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
                 style={{ flex: 1 }}
             >
+                {/* <SafeAreaView style={{ flex: 1 }} /> */}
                 <ScrollView
                     style={{ flex: 1, backgroundColor: colors.background }}
                     contentContainerStyle={{ padding: 20 }}
@@ -111,7 +114,7 @@ const AskQuestions = ({ route }) => {
                                     marginLeft: 'auto'
 
                                 }}>
-                                    <Text style={{ color: colors.background }}>{message.text}</Text>
+                                    <Markdown style={{ color: colors.background }}>{message.text}</Markdown>
                                 </View>
 
                             }
@@ -123,8 +126,9 @@ const AskQuestions = ({ route }) => {
                 </ScrollView>
 
                 {loading ? <Loading /> : ''}
-                <View style={{ flexDirection: 'row', padding: 8, height: 'auto', backgroundColor: colors.background }}>
+                <SafeAreaView style={{ flexDirection: 'row', padding: 8, height: 'auto', backgroundColor: colors.background }}>
                     <TextInput
+                        multiline={true}
                         mode="outlined"
                         placeholder="Type your message..."
                         value={text}
@@ -132,7 +136,7 @@ const AskQuestions = ({ route }) => {
                         style={{ flex: 1, marginRight: 8, backgroundColor: colors.background  }}
                     />
                     <Button
-                        style={{ padding: 8, height: 'auto' }}
+                        style={{ padding: 8, height: 'auto', alignContent: 'center', justifyContent: 'center'}}
                         icon="send"
                         mode="contained"
                         onPress={sendMessage}
@@ -140,8 +144,12 @@ const AskQuestions = ({ route }) => {
                     >
                         Send
                     </Button>
-                </View>
+                </SafeAreaView>
+                
+                
+                
             </KeyboardAvoidingView>
+            
         </>
     );
 };
