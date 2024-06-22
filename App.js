@@ -25,11 +25,25 @@ import AskQuestions from './src/screens/AskQuestions';
 import Settings from './src/components/Derma/Settings';
 import ShowDetails from './src/screens/ShowDetails';
 import Maps from './src/components/Derma/Maps';
-
+import { PaperProvider } from 'react-native-paper';
+import { MD3DarkTheme, MD3LightTheme } from 'react-native-paper';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+  const darkTheme = {
+    ...MD3DarkTheme,
+    
+  };
+
+  const lightTheme = {
+    ...MD3LightTheme,
+  
+  };
+
+
+
   return (
+    <PaperProvider theme={darkTheme}>
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
@@ -74,6 +88,7 @@ const App = () => {
 
       </Stack.Navigator>
     </NavigationContainer>
+    </PaperProvider>
   );
 };
 

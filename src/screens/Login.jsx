@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GeneralHeader from '../components/GeneralHeader';
-import { Button, IconButton, TextInput } from 'react-native-paper';
+import { Button, IconButton, TextInput, useTheme } from 'react-native-paper';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { set } from 'firebase/database';
 const Login = () => {
@@ -22,6 +22,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation()
 
+  const theme = useTheme();
   const handleLogin = () => {
     setError('');
     setLoading(true);
@@ -117,10 +118,10 @@ const Login = () => {
   };
 
   return (
-    <SafeAreaView style={tw`flex-1 `}>
+    <SafeAreaView style={[tw`flex-1 `, {backgroundColor: theme.colors.background}]}>
       {/* <GeneralHeader title={'Login'} /> */}
       <KeyboardAvoidingView behavior='padding' style={tw`flex-1`}>
-        <ScrollView contentContainerStyle={tw`p-4 justify-center items-center flex-grow bg-white`}>
+        <ScrollView contentContainerStyle={[tw`p-4 justify-center items-center flex-grow`, {backgroundColor : theme.colors.background}]}>
 
           <Image
             source={require('../../assets/login.png')}
@@ -139,18 +140,18 @@ const Login = () => {
           {/* Toggle Button */}
           <View style={tw`flex-row mb-4`}>
             <Button
-              style={tw`flex-1 ${isDermaLogin ? 'bg-purple-600' : 'bg-white'} p-0 h-10 `}
+              style={[tw`flex-1 p-0 h-10 `, isDermaLogin ? {backgroundColor: theme.colors.primaryContainer} : theme.colors.inversePrimary]}
               onPress={() => setIsDermaLogin(true)}
             >
-              <Text style={tw`${isDermaLogin ? 'text-white' : 'text-purple-600'} text-center font-semibold`}>
+              <Text style={isDermaLogin? {color: theme.colors.primary}: {color: theme.colors.inversePrimary}}>
                 Login as Derma
               </Text>
             </Button>
             <Button
-              style={tw`flex-1 ${!isDermaLogin ? 'bg-purple-600' : 'bg-white'} p-0 h-10 `}
+              style={[tw`flex-1 p-0 h-10 `, !isDermaLogin ? {backgroundColor: theme.colors.primaryContainer} : theme.colors.inversePrimary]}
               onPress={() => setIsDermaLogin(false)}
             >
-              <Text style={tw`${isDermaLogin ? 'text-purple-600' : 'text-white'} text-center font-semibold`}>
+              <Text style={!isDermaLogin? {color: theme.colors.primary}: { color : theme.colors.inversePrimary}}>
                 Login as Patient
               </Text>
             </Button>
@@ -169,7 +170,7 @@ const Login = () => {
                 placeholder="MTN"
                 keyboardType="email-address"
                 autoCapitalize="none"
-                style={tw`bg-white w-full `}
+                style={tw`w-full`}
               />
               <AntDesign
                 name={mtn === "derm123" || mtn === "DERM123" ? "checkcircle" : "closecircle"}
@@ -190,7 +191,7 @@ const Login = () => {
                 placeholder="Email"
                 keyboardType="email-address"
                 autoCapitalize="none"
-                style={tw`bg-white w-full mb-4  `}
+                style={tw`w-full`}
               />
               <View style={tw`flex-row mb-4`}>
                 <TextInput
@@ -201,7 +202,7 @@ const Login = () => {
                   placeholder="Password"
                   secureTextEntry={passwordVisible}
                   autoCapitalize="none"
-                  style={tw`bg-white w-full mb-4  `}
+                  style={tw`w-full`}
                 />
 
 
@@ -239,7 +240,7 @@ const Login = () => {
                 placeholder="Email"
                 keyboardType="email-address"
                 autoCapitalize="none"
-                style={tw`bg-white w-full mb-4 `}
+                style={tw`w-full`}
               />
 
               <TextInput
@@ -250,7 +251,7 @@ const Login = () => {
                 placeholder="Password"
                 secureTextEntry={true}
                 autoCapitalize="none"
-                style={tw`bg-white w-full mb-4 `}
+                style={tw`w-full`}
               />
             </>
 
@@ -274,7 +275,7 @@ const Login = () => {
             onPress={handleLogin}
             style={tw` w-full rounded-lg`}
           >
-            <Text style={tw`text-white text-center text-lg font-semibold`}>Login</Text>
+            <Text style={tw`text-center text-lg font-semibold`}>Login</Text>
           </Button>
           <Button onPress={() => { navigation.navigate('Signup') }} mode='text'>
             <Text style={tw`text-blue-600 mb-8 text-right py-4`}>Dont have account ? Signup</Text>

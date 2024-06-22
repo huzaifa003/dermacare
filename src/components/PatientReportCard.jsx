@@ -1,8 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Card, Button, Title, Paragraph, Avatar } from 'react-native-paper';
+import { Card, Button, Title, Paragraph, Avatar, useTheme, Text } from 'react-native-paper';
 
 const PatientReportCard = ({ patient }) => {
+  const theme = useTheme();
   const navigation = useNavigation();
   return (
     <Card>
@@ -16,7 +17,7 @@ const PatientReportCard = ({ patient }) => {
         <Paragraph>{patient.summary}</Paragraph>
       </Card.Content>
       <Card.Content>
-        <Paragraph style={{backgroundColor: '#84eab3', paddingLeft: 10, borderRadius: 10}}>Patient ID: {patient.id}</Paragraph>
+        <Paragraph style={{backgroundColor: '#84eab3', paddingLeft: 10, borderRadius: 10}}> <Text style={{color: theme.colors.background}}>Patient ID: {patient.id} </Text></Paragraph>
       </Card.Content>
       <Card.Actions>
         <Button

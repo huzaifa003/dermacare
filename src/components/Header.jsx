@@ -3,10 +3,50 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { auth } from '../Connection/DB';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from 'react-native-paper';
+
 
 const Header = () => {
-
+  const theme = useTheme();  
   const navigation = useNavigation();
+
+  const styles = StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      backgroundColor: theme.colors.background,
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+      borderBottomWidth: 1,
+      borderColor: '#ccc'
+    },
+    logoContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    logo: {
+      width: 50,
+      height: 50,
+      borderRadius: 25,
+    },
+    title: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: theme.colors.tertiary,
+      marginLeft: 10,
+    },
+    avatarContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    avatar: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+    }
+  });
+
   return (
 
     <SafeAreaView edges={['top', 'left', 'right']} style={styles.container}>
@@ -30,43 +70,11 @@ const Header = () => {
     </SafeAreaView>
 
   )
+
+  
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderColor: '#ccc'
-  },
-  logoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  logo: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginLeft: 10,
-  },
-  avatarContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  }
-});
+
+
 
 export default Header;

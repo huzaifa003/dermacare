@@ -6,10 +6,11 @@ import { get, ref } from 'firebase/database';
 import { auth, db } from '../../Connection/DB';
 import { getAuth } from 'firebase/auth';
 import GeneralHeader from '../GeneralHeader';
-import { TextInput } from 'react-native-paper';
+import { TextInput, useTheme } from 'react-native-paper';
 
 
 const Home = () => {
+    const theme = useTheme();
     const [patients, setPatients] = useState([]);
     const [patientsData, setPatientsData] = useState([]);
     const [filteredPatients, setFilteredPatients] = useState([]);
@@ -77,7 +78,7 @@ const Home = () => {
 
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
             {/* <GeneralHeader title="Patients" /> */}
             <TextInput mode='flat' placeholder='Search' onChangeText={handleSearch} />
             <FlatList

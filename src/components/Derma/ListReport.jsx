@@ -7,10 +7,63 @@ import ViewDetailsModal from '../ViewDetailsModal';
 import { get, ref } from 'firebase/database';
 import { auth, db } from '../../Connection/DB';
 import { Ionicons } from '@expo/vector-icons';
-import tw from 'twrnc';
+import tw, { style } from 'twrnc';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useTheme } from 'react-native-paper';
 const ListReport = ({ route, navigation }) => {
+  const theme = useTheme();
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 10,
+      backgroundColor: theme.colors.background,
+    },
+    scrollView: {
+      flex: 1,
+    },
+    card: {
+      marginBottom: 10,
+      elevation: 4,
+      borderRadius: 8,
+    },
+  
+  
+  
+  
+  
+    descriptionText: {
+      fontSize: 16,
+  
+      color: theme.colors.inverseSurface,
+    },
+    statusText: {
+      alignSelf: 'center',
+      fontSize: 20,
+      paddingVertical: 5,
+      paddingHorizontal: 5,
+      color: '#FFFFFF',
+      borderRadius: 5,
+      overflow: 'hidden',
+      fontWeight: 'bold',
+    },
+    // actions: {
+    //   flexDirection: 'row',
+    //   justifyContent: 'space-between',
+    //   padding: 10,
+    // },
+    button: {
+      flex: 1,
+      marginLeft: 5,
+      borderRadius: 5,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });
+
+  
+
+
   let uid = route.params?.uid;
   if (!uid) {
     uid = auth.currentUser.uid;
@@ -145,7 +198,7 @@ const [userType, setUserType] = useState(''); // Add this line
             <Button
               style={[
                 tw`flex-1 p-0 h-10`,
-                statusFilter === 'approved' ? tw`bg-purple-600` : tw`bg-white`
+                statusFilter === 'approved' ? {backgroundColor: theme.colors.primary} : {backgroundColor: theme.colors.outline}
               ]}
               mode="outlined"
               onPress={() => setStatusFilter('approved')}
@@ -157,7 +210,7 @@ const [userType, setUserType] = useState(''); // Add this line
             <Button
               style={[
                 tw`flex-1 p-0 h-10`,
-                statusFilter === 'pending' ? tw`bg-purple-600` : tw`bg-white`
+                statusFilter !== 'approved' ? {backgroundColor: theme.colors.primary} : {backgroundColor: theme.colors.outline}
               ]}
               mode="outlined"
               onPress={() => setStatusFilter('pending')}
@@ -208,19 +261,20 @@ const [userType, setUserType] = useState(''); // Add this line
 
                 {report.status.toLowerCase() !== 'approved' && userType === 'derma' ? (
                   
-                  <Button mode='contained-tonal'
+                  <Button mode='contained'
                     icon={'image-search'}
                     onPress={() => navigation.navigate('Segmentation', { reportId: report.id, imageUrl: report.image, patientId: uid })}
                   >Process Report</Button>
-                ) : report.status.toLowerCase() === 'approved'?  <Button mode='contained-tonal' icon={'information'} onPress={() => handleViewDetails(report.id, report.status, report.recommendation, report.feedback, report.pdf, report.image)} >View Details</Button> : ""}
+                ) : report.status.toLowerCase() === 'approved'?  <Button mode='contained' icon={'information'} onPress={() => handleViewDetails(report.id, report.status, report.recommendation, report.feedback, report.pdf, report.image)} >View Details</Button> : ""}
 
                 {/* { report.status.toLowerCase() === 'approved' ?  : "" } */}
 
 
                 <Button
+                  mode='contained'
                   icon={'chat'}
                   onPress={() => navigation.navigate('Chat', { reportId: report.id, patientId: uid })}
-                  textColor="#FFFFFF">Chat</Button>
+                 >Chat</Button>
 
               </Card.Actions>
             </Card>
@@ -234,52 +288,5 @@ const [userType, setUserType] = useState(''); // Add this line
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: '#F8F9FA',
-  },
-  scrollView: {
-    flex: 1,
-  },
-  card: {
-    marginBottom: 10,
-    elevation: 4,
-    borderRadius: 8,
-  },
-
-
-
-
-
-  descriptionText: {
-    fontSize: 16,
-
-    color: '#495057',
-  },
-  statusText: {
-    alignSelf: 'center',
-    fontSize: 20,
-    paddingVertical: 5,
-    paddingHorizontal: 5,
-    color: '#FFFFFF',
-    borderRadius: 5,
-    overflow: 'hidden',
-    fontWeight: 'bold',
-  },
-  // actions: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-between',
-  //   padding: 10,
-  // },
-  button: {
-    flex: 1,
-    marginLeft: 5,
-    borderRadius: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default ListReport;
