@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import GeneralHeader from '../GeneralHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRef } from 'react';
-
+import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 const VisualSearch = ({ route }) => {
   const theme = useTheme();
   const scrollViewRef = useRef();  // Add this line
@@ -41,6 +41,29 @@ const VisualSearch = ({ route }) => {
     }
   }, [route.params?.image]);
 
+  async function compressImage(uri) {
+    const manipResult = await manipulateAsync(
+      uri,
+      [{ resize: { width: 300 } }], // You might need to adjust the width depending on the aspect ratio
+      { compress: 0.5, format: SaveFormat.JPEG }
+    );
+    
+    console.log(manipResult.size)
+    if (manipResult.size < 1000000) {
+      return manipResult.uri; // If the image is already less than 1MB, return it
+    } else {
+      // If not, compress further by reducing the quality
+      return compressImageFurther(manipResult.uri);
+    }
+  }
+
+  async function compressImageFurther(uri) {
+    return await manipulateAsync(
+      uri,
+      [],
+      { compress: 0.1, format: SaveFormat.JPEG }
+    );
+  }
 
 
   const uploadImage = async (imageUri) => {
@@ -50,19 +73,43 @@ const VisualSearch = ({ route }) => {
       setLoading(false);
       return;
     }
+
     const uriParts = imageUri.split('.');
     const fileType = uriParts[uriParts.length - 1];
-    let bytes;
-    const res = await fetch(imageUri);
-    const blob = await res.blob();
 
-    console.log(blob);
 
     let updatedFileType = fileType;
 
     if (fileType.includes('&')) {
       updatedFileType = fileType.split("&")[0];
     }
+
+
+
+
+    // return;
+
+
+
+
+    let bytes;
+    const res = await fetch(imageUri);
+    const blob = await res.blob();
+    if (blob) {
+      console.log('Blob:', blob);
+      // return;
+    }
+    let compressed = imageUri
+    // if (blob.size > 990000) {
+      console.log("hekllko")
+      compressed = await compressImage(imageUri);
+      console.log('Compressed:', compressed);
+      setSelectedImage(compressed.uri);
+    // }
+    
+    
+
+
 
 
     console.log(updatedFileType)
@@ -80,13 +127,15 @@ const VisualSearch = ({ route }) => {
 
     let imgs = await AsyncStorage.getItem('images');
     // imgs = undefined;
-    if (imgs) {
+    console.log(images);
+    if (imgs && imgs.length > 0) {
       console.log(imgs)
       setImages(JSON.parse(imgs));
       setLoading(false);
       return;
 
     }
+
     console.log('images:', images)
     try {
       const response = await fetch('https://api.bing.microsoft.com/v7.0/images/visualsearch', {
@@ -98,6 +147,22 @@ const VisualSearch = ({ route }) => {
         }
 
       });
+
+      // fetch('https://api.bing.microsoft.com/v7.0/images/visualsearch', {
+      //   method: 'POST',
+      //   body: formData,
+      //   headers: headers,
+      // })
+      //   .then((response) => response.json())
+      //   .then((data) => {
+      //     console.log('Success:', data);
+      //   })
+      //   .catch((error) => {
+      //     console.error('Error:', error);
+      //   });
+
+
+
       const data = await response.json();
       const images = data.tags[0].actions[2].data.value;
       console.log(images[0]);
@@ -245,40 +310,40 @@ const VisualSearch = ({ route }) => {
       textAlign: 'center',
     },
     headerContainer: {
-          
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginVertical: 20,
-          paddingVertical: 10,
-          backgroundColor: '#f3e5f5',
-          borderRadius: 10,
-          elevation: 3,
-          
-          width:'100%'
-      },
-      similarImagesText: {
-          color: 'purple',
-          fontWeight: '700',
-          paddingHorizontal: 15,
-          fontSize: 18,
-      },
-      line: {
-          flex: 1,
-          height: 2,
-          backgroundColor: 'purple',
-          borderRadius: 1,
-      },
-  
-  
-  
+
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginVertical: 20,
+      paddingVertical: 10,
+      backgroundColor: '#f3e5f5',
+      borderRadius: 10,
+      elevation: 3,
+
+      width: '100%'
+    },
+    similarImagesText: {
+      color: 'purple',
+      fontWeight: '700',
+      paddingHorizontal: 15,
+      fontSize: 18,
+    },
+    line: {
+      flex: 1,
+      height: 2,
+      backgroundColor: 'purple',
+      borderRadius: 1,
+    },
+
+
+
   });
 
 
 
   return (
     <>
-       {  <GeneralHeader title="Visual Search" />} 
+      {<GeneralHeader title="Visual Search" />}
       <FAB.Group
         style={styles.fab}
         open={false}
@@ -339,7 +404,7 @@ const VisualSearch = ({ route }) => {
                   </Text>
                   <View style={styles.line} />
                 </View>
-              ): <Text style={styles.noImageText} variant="headlineMedium"> No similar images found</Text>}
+              ) : <Text style={styles.noImageText} variant="headlineMedium"> No similar images found</Text>}
               <Text />
 
               {images.map((item, index) => (
