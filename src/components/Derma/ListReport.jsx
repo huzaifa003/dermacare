@@ -5,13 +5,21 @@ import GeneralHeader from '../GeneralHeader';
 import FeedbackModal from '../FeedbackModal';
 import ViewDetailsModal from '../ViewDetailsModal';
 import { get, ref } from 'firebase/database';
-import { db } from '../../Connection/DB';
+import { auth, db } from '../../Connection/DB';
 import { Ionicons } from '@expo/vector-icons';
 import tw from 'twrnc';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ListReport = ({ route, navigation }) => {
-  const { uid } = route.params;
-  console.log(uid);
+  let uid = route.params?.uid;
+  if (!uid) {
+    uid = auth.currentUser.uid;
+    if (!uid) {
+      console.error('User not logged in');
+      uid = '4gNQR4efTjcN6jaFklp1nv7pGi32';
+    }
+  }
+  
 
   const [query, setQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
@@ -20,8 +28,17 @@ const ListReport = ({ route, navigation }) => {
   const [patientReports, setPatientReports] = useState([]);
   const [statusFilter, setStatusFilter] = useState('approved'); // Default filter
   const [filteredReports, setFilteredReports] = useState([]);
-
+const [userType, setUserType] = useState(''); // Add this line
   useEffect(() => {
+    if (AsyncStorage.getItem("userType")) {
+      AsyncStorage.getItem("userType").then((value) => {
+        setUserType(value);
+      }
+      )
+    }
+    else {
+      setUserType('derma');
+    }
     fetchReports();
   }, []);
 
@@ -98,7 +115,9 @@ const ListReport = ({ route, navigation }) => {
 
   return (
     <>
-      <GeneralHeader title={'Reports'} />
+
+    { userType === 'derma' ? <GeneralHeader title={'Reports'} /> : ''}
+      
 
       <TextInput
         mode='flat'
@@ -187,12 +206,13 @@ const ListReport = ({ route, navigation }) => {
               <Card.Actions >
 
 
-                {report.status.toLowerCase() !== 'approved' ? (
+                {report.status.toLowerCase() !== 'approved' && userType === 'derma' ? (
+                  
                   <Button mode='contained-tonal'
                     icon={'image-search'}
                     onPress={() => navigation.navigate('Segmentation', { reportId: report.id, imageUrl: report.image, patientId: uid })}
                   >Process Report</Button>
-                ) : <Button mode='contained-tonal' icon={'information'} onPress={() => handleViewDetails(report.id, report.status, report.recommendation, report.feedback, report.pdf, report.image)} >View Details</Button>}
+                ) : report.status.toLowerCase() === 'approved'?  <Button mode='contained-tonal' icon={'information'} onPress={() => handleViewDetails(report.id, report.status, report.recommendation, report.feedback, report.pdf, report.image)} >View Details</Button> : ""}
 
                 {/* { report.status.toLowerCase() === 'approved' ?  : "" } */}
 
