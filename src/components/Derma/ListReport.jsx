@@ -87,9 +87,9 @@ const ListReport = ({ route, navigation }) => {
     setFeedbackModalVisible(true);
   };
 
-  const handleViewDetails = (reportTitle) => {
-    console.log(`View details for ${reportTitle}`);
-    setDetailsModalVisible(true);
+  const handleViewDetails = (id, status, recommendation, feedback, pdf, image ) => {
+    console.log(`View details for ${id}`);
+    navigation.navigate('Show Details', { id: id, status: status, recommendation: recommendation, feedback: feedback, pdf: pdf, image: image });
   };
 
   const getStatusColor = (status) => {
@@ -192,7 +192,7 @@ const ListReport = ({ route, navigation }) => {
                     icon={'image-search'}
                     onPress={() => navigation.navigate('Segmentation', { reportId: report.id, imageUrl: report.image, patientId: uid })}
                   >Process Report</Button>
-                ) : <Button mode='contained-tonal' icon={'information'} onPress={() => handleViewDetails(report.id)} >View Details</Button>}
+                ) : <Button mode='contained-tonal' icon={'information'} onPress={() => handleViewDetails(report.id, report.status, report.recommendation, report.feedback, report.pdf, report.image)} >View Details</Button>}
 
                 {/* { report.status.toLowerCase() === 'approved' ?  : "" } */}
 

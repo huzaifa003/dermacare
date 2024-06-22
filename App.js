@@ -23,6 +23,7 @@ import VisualSearch from './src/components/Derma/VisualSearch';
 import DiseaseInformationScreen from './src/screens/DiseaseInformationScreen';
 import AskQuestions from './src/screens/AskQuestions';
 import Settings from './src/components/Derma/Settings';
+import ShowDetails from './src/screens/ShowDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -58,7 +59,7 @@ const App = () => {
         <Stack.Screen name="Feedback" component={Feedback} />
         <Stack.Screen name="Patient" component={PatientBottomMenu} />
         <Stack.Screen name='Chat with AI' component={RAGChat} />
-
+        <Stack.Screen name='Show Details' component={ShowDetails} />
         <Stack.Screen name='Chat' component={Chat} />
 
 
