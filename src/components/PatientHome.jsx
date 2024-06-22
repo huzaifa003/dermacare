@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { Surface, TouchableRipple } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import LottieView from 'lottie-react-native';
 
 const PatientHome = ({ navigation }) => {
   const features = [
@@ -27,11 +28,22 @@ const PatientHome = ({ navigation }) => {
   );
 
   return (
-    <View style={styles.container}>
-      {features.map((feature, idx) => (
-        <FeatureTile key={idx} name={feature.name} icon={feature.icon} navigateTo={feature.screen} />
-      ))}
-    </View>
+    <>
+      <LottieView
+        source={require('../../assets/HomeScreenAnimation.json')} // Path to your Lottie file
+        autoPlay={true}
+        loop={true}
+        style={styles.animation}
+        speed={0.5}
+      />
+      <Text style={styles.headerText}>Welcome to Dermassist</Text>
+      <View style={styles.container}>
+
+        {features.map((feature, idx) => (
+          <FeatureTile key={idx} name={feature.name} icon={feature.icon} navigateTo={feature.screen} />
+        ))}
+      </View>
+    </>
   );
 };
 
@@ -71,6 +83,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
   },
+  animation: {
+    width: 'auto',
+    height: 200,
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#4287f5',
+  },
+
 });
 
 export default PatientHome;
