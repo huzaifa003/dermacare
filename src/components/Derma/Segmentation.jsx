@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   ScrollView, View, Text, Image, StyleSheet, Alert, ActivityIndicator, TouchableOpacity
 } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Button, useTheme } from 'react-native-paper';
 import Checkbox from 'expo-checkbox';
 import * as FileSystem from 'expo-file-system';
 import GeneralHeader from '../GeneralHeader';
@@ -13,8 +13,13 @@ const Segmentation = ({ route, navigation }) => {
   const [progress, setProgress] = useState(0);
   const [returnedImageUrl, setReturnedImageUrl] = useState(null);
   const [error, setError] = useState(null);
+  const theme = useTheme();
+
+
+
 
   const uploadImage = async () => {
+
     setIsLoading(true);
     setError(null);
     const interval = setInterval(() => {
@@ -29,14 +34,14 @@ const Segmentation = ({ route, navigation }) => {
     });
 
     try {
-        const response = await fetch('https://tidy-octopus-diverse.ngrok-free.app/segment', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Content-Type': 'multipart/form-data',
+      const response = await fetch('https://tidy-octopus-diverse.ngrok-free.app/segment', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
 
-            },
-        });
+        },
+      });
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -70,12 +75,58 @@ const Segmentation = ({ route, navigation }) => {
     }
   };
 
+
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    },
+    contentContainer: {
+      padding: 20,
+      alignItems: 'center',
+    },
+    header: {
+      fontSize: 22,
+      fontWeight: 'bold',
+      marginBottom: 20,
+      color: theme.colors.primary,
+    },
+    image: {
+      width: '100%',
+      height: 200,
+      resizeMode: 'contain',
+      borderRadius: 10,
+      marginBottom: 20,
+    },
+    buttonContainer: {
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      gap: 10,
+      margin: 10
+
+    },
+
+    nextButtonText: {
+      color: '#ffffff',
+    },
+    loadingContainer: {
+      alignItems: 'center',
+      marginBottom: 20,
+    },
+    errorText: {
+      color: 'red',
+      fontSize: 16,
+    },
+  });
+
+
   return (
     <>
       <GeneralHeader title={'Segmentation'} />
       <ScrollView style={styles.container}>
         <View style={styles.contentContainer}>
-          <Text style={styles.header}>Disease Classification Report</Text>
+          {/* <Text style={styles.header}>Segmentation</Text> */}
           <Image source={{ uri: imageUrl }} style={styles.image} />
           {returnedImageUrl && (
             <Image source={{ uri: returnedImageUrl }} style={styles.image} />
@@ -84,14 +135,14 @@ const Segmentation = ({ route, navigation }) => {
             <Button
               mode='contained'
               icon={'image-size-select-large'}
-              
+
               onPress={uploadImage}
-              
+
             >Generate Segmentation</Button>
 
-            
+
             {/*returnedImageUrl */ true && (
-              <Button icon={'arrow-right'} mode='contained-tonal' onPress={() => navigation.navigate('Classify', { 'image': imageUrl, 'segmented': returnedImageUrl, "patientId": patientId , 'reportId': reportId})}>
+              <Button icon={'arrow-right'} mode='contained-tonal' onPress={() => navigation.navigate('Classify', { 'image': imageUrl, 'segmented': returnedImageUrl, "patientId": patientId, 'reportId': reportId })}>
                 <Text>Proceed to Next Step</Text>
               </Button>
             )}
@@ -109,46 +160,5 @@ const Segmentation = ({ route, navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f4f4f8',
-  },
-  contentContainer: {
-    padding: 20,
-    alignItems: 'center',
-  },
-  header: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  image: {
-    width: '100%',
-    height: 200,
-    resizeMode: 'contain',
-    borderRadius: 10,
-    marginBottom: 20,
-  },
-  buttonContainer: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    gap: 10,
-    margin: 10
-    
-  },
-
-  nextButtonText: {
-    color: '#ffffff',
-  },
-  loadingContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 16,
-  },
-});
 
 export default Segmentation;

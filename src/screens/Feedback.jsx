@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Image, Text, StyleSheet, Linking, ScrollView, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
-import { Button, TextInput, Card } from 'react-native-paper';
+import { Button, TextInput, Card, useTheme } from 'react-native-paper';
 import GeneralHeader from '../components/GeneralHeader';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { auth, db, storage } from '../Connection/DB';
@@ -18,6 +18,38 @@ export default function Feedback({ route }) {
     const [pdf, setPdf] = useState('');
     const [loading, setLoading] = useState(false);
     const [uri, setUri] = useState();
+    const theme = useTheme();
+
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            backgroundColor: theme.colors.background,
+            padding: 10,
+        },
+        scroll: {
+            marginVertical: 4,
+        },
+        card: {
+            margin: 4,
+        },
+        image: {
+            width: 200,
+            height: 200,
+            marginBottom: 10,
+        },
+        input: {
+            marginVertical: 6,
+        },
+        button: {
+            marginVertical: 10,
+        },
+        link: {
+            color: 'blue',
+            fontWeight: 'bold',
+        },
+    });
+
+
 
     const generatePdf = async () => {
         setLoading(true);
@@ -127,89 +159,64 @@ export default function Feedback({ route }) {
     };
 
     return (
-        <View style={styles.container}>
-            <KeyboardAvoidingView behavior='padding'>
-                <GeneralHeader title="Feedback" />
-                <ScrollView style={styles.scroll}>
-                    <Card style={styles.card}>
-                        <Card.Title title="Patient Images" />
-                        <Card.Content>
-                            <Image source={{ uri: params.image }} style={styles.image} />
-                            {/* <Image source={{ uri: params.segmented }} style={styles.image} /> */}
-                        </Card.Content>
-                    </Card>
-                    <TextInput
-                        label="Recommendation"
-                        value={recommendation}
-                        onChangeText={setRecommendation}
-                        mode="outlined"
-                        style={styles.input}
-                    />
-                    <TextInput
-                        label="Feedback"
-                        value={feedback}
-                        onChangeText={setFeedback}
-                        mode="outlined"
-                        style={styles.input}
-                    />
-                    {loading ? (
-                        <ActivityIndicator size="large" color="#0000ff" />
-                    ) : (
-                        <>
-                            {pdf && (
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
+        <>
+            <GeneralHeader title="Feedback" />
+            <View style={styles.container}>
+                <KeyboardAvoidingView behavior='padding'>
+
+                    <ScrollView style={styles.scroll}>
+                        <Card style={styles.card}>
+                            <Card.Title title="Patient Image" />
+                            <Card.Content>
+                                <Image source={{ uri: params.image }} style={styles.image} />
+                                {/* <Image source={{ uri: params.segmented }} style={styles.image} /> */}
+                            </Card.Content>
+                        </Card>
+                        <TextInput
+                            label="Recommendation"
+                            value={recommendation}
+                            onChangeText={setRecommendation}
+                            mode="outlined"
+                            style={styles.input}
+                        />
+                        <TextInput
+                            label="Feedback"
+                            value={feedback}
+                            onChangeText={setFeedback}
+                            mode="outlined"
+                            style={styles.input}
+                        />
+                        {loading ? (
+                            <ActivityIndicator size="large" color="#0000ff" />
+                        ) : (
+                            <>
+                                {pdf && (
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
 
 
-                                    <Button icon={'share'} mode="elevated" onPress={async () => { await sharePdf() }} style={styles.button}>
-                                        Share PDF
-                                    </Button>
+                                        <Button icon={'share'} mode="elevated" onPress={async () => { await sharePdf() }} style={styles.button}>
+                                            Share PDF
+                                        </Button>
 
-                                    <Button icon={'download'} mode="elevated" onPress={() => Linking.openURL(pdf)} style={styles.button}>
-                                        Download PDF
-                                    </Button>
-
-
+                                        <Button icon={'download'} mode="elevated" onPress={() => Linking.openURL(pdf)} style={styles.button}>
+                                            Download PDF
+                                        </Button>
 
 
-                                </View>
-                            )}
-                            <Button mode="contained" onPress={generatePdf} style={styles.button}>
-                                Generate PDF
-                            </Button>
 
-                        </>
-                    )}
-                </ScrollView>
 
-            </KeyboardAvoidingView>
-        </View>
+                                    </View>
+                                )}
+                                <Button mode="contained" onPress={generatePdf} style={styles.button}>
+                                    Generate PDF
+                                </Button>
+
+                            </>
+                        )}
+                    </ScrollView>
+
+                </KeyboardAvoidingView>
+            </View>
+        </>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 8,
-    },
-    scroll: {
-        marginVertical: 4,
-    },
-    card: {
-        margin: 4,
-    },
-    image: {
-        width: 200,
-        height: 200,
-        marginBottom: 10,
-    },
-    input: {
-        marginVertical: 6,
-    },
-    button: {
-        marginVertical: 10,
-    },
-    link: {
-        color: 'blue',
-        fontWeight: 'bold',
-    },
-});

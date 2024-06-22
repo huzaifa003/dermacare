@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, FlatList, KeyboardAvoidingView, Platform, TouchableOpacity, Image } from 'react-native';
-import { Button, TextInput, Text, Card } from 'react-native-paper';
+import { Button, TextInput, Text, Card, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import tw from 'twrnc';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native'; // Ensure you have rea
 import GeneralHeader from '../components/GeneralHeader';
 
 const Chat = ({ route }) => {
+    const theme = useTheme();
     const navigation = useNavigation();
     const { reportId, patientId } = route.params;
     const [messages, setMessages] = useState([]);
@@ -74,9 +75,9 @@ const Chat = ({ route }) => {
                     />
                     <Text style={[tw`${textStyle}`]}>{username}</Text>
                 </View>
-                <Text>{item.message}</Text>
-                <Text>{item.timestamp}</Text>
-                <Text>{item.role}</Text>
+                <Text style={{color: theme.colors.surface}}>{item.message}</Text>
+                <Text style={{color: theme.colors.surface}}>{item.timestamp}</Text>
+                <Text style={{color: theme.colors.surface}}>{item.role}</Text>
             </Card>
         );
     };
@@ -85,7 +86,7 @@ const Chat = ({ route }) => {
         <>
        
             <GeneralHeader title="Chat" />
-            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={tw`flex-1`}>
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{backgroundColor: `${theme.colors.background}`, flex: 1}}>
                 <FlatList
                     data={messages}
                     keyExtractor={(item, index) => index.toString()}
