@@ -4,9 +4,38 @@ import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useNavigation } from '@react-navigation/native';
 import GeneralHeader from '../GeneralHeader';
+import { useTheme } from 'react-native-paper';
 
 
 const Maps = () => {
+  const theme = useTheme();
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: theme.colors.background,
+    },
+    map: {
+      width: '100%',
+      height: '100%',
+    },
+    overlayButton: {
+      position: 'absolute',
+      bottom: 20,
+      backgroundColor: theme.colors.primaryContainer,
+      padding: 10,
+      borderRadius: 10,
+    },
+    overlayButtonText: {
+      color: theme.colors.primary,
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+  });
+
+
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const navigation = useNavigation()
@@ -68,28 +97,6 @@ const Maps = () => {
 };
 
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  map: {
-    width: '100%',
-    height: '100%',
-  },
-  overlayButton: {
-    position: 'absolute',
-    bottom: 20,
-    backgroundColor: '#007BFF',
-    padding: 10,
-    borderRadius: 10,
-  },
-  overlayButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
+
 
 export default Maps;

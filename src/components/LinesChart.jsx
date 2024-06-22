@@ -1,91 +1,74 @@
-import { LineChart } from "react-native-gifted-charts"
 import React, { useEffect, useState } from "react";
-import { Platform, View } from "react-native";
-import { useTheme } from "react-native-paper";
-
-export default LinesChart = ({ data }) => {
-    console.log(data)
+import { View, Switch, Text } from "react-native";
+import { Surface, useTheme } from "react-native-paper";
+import { LineChart } from "react-native-gifted-charts";
+export default function LinesChart({ data }) {
     const theme = useTheme();
-    const [lineData, setLineData] = useState(data);
-    function formatVeryCompactDateTime(timestamp) {
-        // Create a Date object from the timestamp
-        var date = new Date(timestamp);
+    console.log(theme.colors)
+    const [lineData, setLineData] = useState([]);
+    const [chartVisible, setChartVisible] = useState(false);
 
-        // Round the hour to the nearest
+    function formatVeryCompactDateTime(timestamp) {
+        var date = new Date(timestamp);
         var minutes = date.getMinutes();
         if (minutes >= 30) {
-            date.setHours(date.getHours() + 1); // Increment hour if minutes are 30 or more
+            date.setHours(date.getHours() + 1);
         }
-
-        // Zero out the minutes and seconds for clean hour display
         date.setMinutes(0, 0, 0);
 
-        // Define options for displaying the day and rounded hour
         var options = {
-            month: 'short', // abbreviated month name
+            month: 'short',
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit',
-            hour12: false // use 24-hour format
+            hour12: false
         };
 
-        // Format the date with the specified options
         var compactDateTime = date.toLocaleString('en-US', options);
-        compactDateTime = compactDateTime.replace(',', ''); // Remove comma after day
-        compactDateTime = compactDateTime.replace(' ', '_'); // Remove extra space after day
-        console.log(compactDateTime)
+        compactDateTime = compactDateTime.replace(',', '').replace(' ', '_');
 
         return compactDateTime;
     }
+
     useEffect(() => {
-        const dat = []
-        for (let i = 0; i < data.length; i++) {
-            const value = data[i].uv;
-            const dataPointText = formatVeryCompactDateTime(data[i].uv_time);
-  
-            dat.push({ value, dataPointText })
-  
-          }
-        setLineData(dat)
-    }
+        const formattedData = data.map(item => ({
+            value: item.uv,
+            dataPointText: formatVeryCompactDateTime(item.uv_time)
+        }));
+        setLineData(formattedData);
+        setChartVisible(true); // Show the toggle once data is formatted and ready
+    }, [data]);
 
-    , [])
-
-    //   const lineData = [
-    //       {value: 0, dataPointText: '0'},
-    //       {value: 20, dataPointText: '20'},
-    //       {value: 18, dataPointText: '18'},
-    //       {value: 40, dataPointText: '40'},
-    //       {value: 36, dataPointText: '36'},
-    //       {value: 60, dataPointText: '60'},
-    //       {value: 54, dataPointText: '54'},
-    //       {value: 85, dataPointText: '85'}
-    //   ];
     return (
-        <View style={{ backgroundColor: theme.colors.background, flex: 1 }}>
-            {console.log(lineData)
-            
-            }
-
-            { lineData && <LineChart
-                
-                
-                initialSpacing={0}
-                data={lineData}
-                spacing={50}
-                textColor1={theme.colors.primary}
-                textShiftY={-25}
-                textShiftX={-15}
-                textFontSize={12}
-                thickness={5}
-                hideRules
-                isAnimated={false}
-                yAxisColor="#0BA5A4"
-                showVerticalLines
-                verticalLinesColor="rgba(14,164,164,0.5)"
-                xAxisColor="#0BA5A4"
-                color="#0BA5A4"
-            />}
+        <View style={{ backgroundColor: theme.colors.background, flex: 1, justifyContent: 'center' }}>
+            <Surface  style={{ backgroundColor: theme.colors.surface,  marginVertical: 10, alignItems: 'center', padding: 10 }}>
+                <Text style={{ color: theme.colors.text }}>Show Chart:</Text>
+                <Switch
+                    value={chartVisible}
+                    onValueChange={setChartVisible}
+                    thumbColor={chartVisible ? theme.colors.primary : "#ccc"}
+                    trackColor={{ false: "#767577", true: theme.colors.accent }}
+                />
+            </Surface>
+            {chartVisible && (
+                <LineChart
+                    initialSpacing={0}
+                    data={lineData}
+                    spacing={50}
+                    textColor1={theme.colors.text} // Ensuring readability
+                    textShiftY={-25}
+                    textShiftX={-15}
+                    textFontSize={12}
+                    thickness={5}
+                    hideRules
+                    isAnimated={false}
+                    yAxisColor={theme.colors.primary} // Dynamic color based on theme
+                    showVerticalLines
+                    verticalLinesColor="rgba(14,164,164,0.5)" // Consider adjusting based on theme
+                    xAxisColor={theme.colors.primary} // Dynamic color based on theme
+                    color={theme.colors.accent} // Dynamic color for the line chart
+                />
+            )}
         </View>
     );
-};
+}
