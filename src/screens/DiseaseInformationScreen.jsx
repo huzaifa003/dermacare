@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, ScrollView } from 'react-native';
-import { Searchbar, Card, Button, Text, Divider } from 'react-native-paper';
+import { Searchbar, Card, Button, Text, Divider, useTheme } from 'react-native-paper';
 
 
 import DiseaseInformation from "../components/Patient/DiseaseInformation";
@@ -369,6 +369,7 @@ const dermatologicalConditionsImages = [
 
 const xyz = "../../assets/SameFileFitz/xeroderma pigmentosum/disease.jpg";
 const DiseaseInformationScreen = () => {
+    const theme  = useTheme();
     const navigation = useNavigation();
     useEffect(() => {
         console.log("DiseaseInformationScreen mounted");
@@ -399,7 +400,7 @@ const DiseaseInformationScreen = () => {
     return (
         <>
             <GeneralHeader title="Disease Information" />
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
                 {/* <GeneralHeader title="Disease Information" /> */}
                 <Searchbar
                     mode='view'

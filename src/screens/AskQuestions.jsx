@@ -98,8 +98,9 @@ const AskQuestions = ({ route }) => {
                                     paddingHorizontal: 12,
                                     paddingVertical: 8,
                                     marginRight: 'auto'
+                                    
                                 }}>
-                                    <Text style={{ color: 'white' }}>{message.text}</Text>
+                                    <Text style={{ color: colors.background }}>{message.text}</Text>
                                 </View>
                                 :
                                 <View style={{
@@ -110,7 +111,7 @@ const AskQuestions = ({ route }) => {
                                     marginLeft: 'auto'
 
                                 }}>
-                                    <Text style={{ color: 'white' }}>{message.text}</Text>
+                                    <Text style={{ color: colors.background }}>{message.text}</Text>
                                 </View>
 
                             }
@@ -122,13 +123,13 @@ const AskQuestions = ({ route }) => {
                 </ScrollView>
 
                 {loading ? <Loading /> : ''}
-                <View style={{ flexDirection: 'row', padding: 8, height: 'auto' }}>
+                <View style={{ flexDirection: 'row', padding: 8, height: 'auto', backgroundColor: colors.background }}>
                     <TextInput
                         mode="outlined"
                         placeholder="Type your message..."
                         value={text}
                         onChangeText={setText}
-                        style={{ flex: 1, marginRight: 8 }}
+                        style={{ flex: 1, marginRight: 8, backgroundColor: colors.background  }}
                     />
                     <Button
                         style={{ padding: 8, height: 'auto' }}

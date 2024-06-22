@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import { Avatar, List, Button, Divider, TextInput } from "react-native-paper";
+import { Avatar, List, Button, Divider, TextInput, useTheme } from "react-native-paper";
 import { auth, db, storage } from "../../Connection/DB";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -19,6 +19,32 @@ const Settings = () => {
   const togglePasswordVisibility = () => {
     setPasswordVisibility(!passwordVisibility);
   };
+
+  const theme = useTheme();
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    },
+    profileContainer: {
+      alignItems: "center",
+      paddingVertical: 20,
+    },
+    avatar: {
+      marginBottom: 8,
+    },
+    username: {
+      fontSize: 20,
+      fontWeight: "bold",
+    },
+    logoutButton: {
+      margin: 15,
+    },
+  });
+
+  
+
   useEffect(() => {
 
 
@@ -231,25 +257,5 @@ const Settings = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f6f6f6",
-  },
-  profileContainer: {
-    alignItems: "center",
-    paddingVertical: 20,
-  },
-  avatar: {
-    marginBottom: 8,
-  },
-  username: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  logoutButton: {
-    margin: 15,
-  },
-});
 
 export default Settings;

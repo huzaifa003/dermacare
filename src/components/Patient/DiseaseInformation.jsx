@@ -19,6 +19,7 @@ const DiseaseInformation = ({ disease, image }) => {
                     onPress={() => navigation.navigate("Ask Questions", { disease: disease })}
                     style={styles.button}
                     labelStyle={styles.buttonLabel}>
+
                     Ask Questions
                 </Button>
             </Card.Actions>
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
     },
     buttonLabel: {
-        color: '#ffffff',
+        
         fontSize: 18,
     }
 });

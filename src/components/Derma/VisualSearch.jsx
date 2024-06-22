@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Image, Alert, ScrollView, Linking, TouchableOpacity } from 'react-native';
-import { FAB, Portal, Provider, Modal, Button, Card, Title, Paragraph, Text, ActivityIndicator, PaperProvider, Divider, Surface } from 'react-native-paper';
+import { FAB, Portal, Provider, Modal, Button, Card, Title, Paragraph, Text, ActivityIndicator, PaperProvider, Divider, Surface, useTheme } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import GeneralHeader from '../GeneralHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRef } from 'react';
 
 const VisualSearch = ({ route }) => {
+  const theme = useTheme();
   const scrollViewRef = useRef();  // Add this line
   const [showScrollToTop, setShowScrollToTop] = useState(false)
 
@@ -171,8 +172,112 @@ const VisualSearch = ({ route }) => {
     // Additional processing tasks can be added here
   };
 
+
+
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      padding: 20,
+      backgroundColor: theme.colors.background,
+    },
+    surface: {
+      width: '100%',
+      padding: 10,
+      borderRadius: 10,
+      marginBottom: 20,
+      elevation: 2,
+    },
+    image: {
+      width: '100%',
+      height: 250,
+      borderRadius: 10,
+    },
+    button: {
+      marginTop: 10,
+      // backgroundColor: '#6c63ff',
+    },
+    processButton: {
+      marginTop: 20,
+    },
+    modalContent: {
+      backgroundColor: 'white',
+      padding: 20,
+      margin: 50,
+      borderRadius: 10,
+      alignItems: 'center',
+    },
+    fab: {
+      position: 'absolute', // Position the FAB absolutely
+      margin: 16,
+      right: 0, // Align to the right
+      bottom: 0, // Align to the bottom
+      zIndex: 1,
+    },
+    scrollToTopButton: {
+      position: 'absolute',
+      right: 20,
+      bottom: 100,
+      backgroundColor: theme.colors.background,
+      padding: 10,
+      borderRadius: 20,
+      elevation: 3,
+    },
+    noImageText: {
+      color: 'purple',
+      fontWeight: '400',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      borderTopWidth: 1,
+      borderBottomWidth: 1,
+      paddingVertical: 4,
+      textAlign: 'center',
+    },
+    similarImagesText: {
+      color: 'purple',
+      fontWeight: '400',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      borderTopWidth: 1,
+      borderBottomWidth: 1,
+      paddingVertical: 4,
+      textAlign: 'center',
+    },
+    headerContainer: {
+          
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginVertical: 20,
+          paddingVertical: 10,
+          backgroundColor: '#f3e5f5',
+          borderRadius: 10,
+          elevation: 3,
+          
+          width:'100%'
+      },
+      similarImagesText: {
+          color: 'purple',
+          fontWeight: '700',
+          paddingHorizontal: 15,
+          fontSize: 18,
+      },
+      line: {
+          flex: 1,
+          height: 2,
+          backgroundColor: 'purple',
+          borderRadius: 1,
+      },
+  
+  
+  
+  });
+
+
+
   return (
-    <Provider>
+    <>
        {  <GeneralHeader title="Visual Search" />} 
       <FAB.Group
         style={styles.fab}
@@ -193,6 +298,7 @@ const VisualSearch = ({ route }) => {
         ref={scrollViewRef}
         onScroll={onScroll}
         scrollEventThrottle={5} // 16ms is 60fps
+        style={{ backgroundColor: theme.colors.background }}
       >
         <View style={styles.container}>
           {selectedImage ? (
@@ -292,107 +398,10 @@ const VisualSearch = ({ route }) => {
           <Button icon={'format-vertical-align-top'}>Up</Button>
         </TouchableOpacity>
       )}
-    </Provider>
+    </>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#FFFFFF',
-  },
-  surface: {
-    width: '100%',
-    padding: 10,
-    borderRadius: 10,
-    marginBottom: 20,
-    elevation: 2,
-  },
-  image: {
-    width: '100%',
-    height: 250,
-    borderRadius: 10,
-  },
-  button: {
-    marginTop: 10,
-    // backgroundColor: '#6c63ff',
-  },
-  processButton: {
-    marginTop: 20,
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    margin: 50,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  fab: {
-    position: 'absolute', // Position the FAB absolutely
-    margin: 16,
-    right: 0, // Align to the right
-    bottom: 0, // Align to the bottom
-    zIndex: 1,
-  },
-  scrollToTopButton: {
-    position: 'absolute',
-    right: 20,
-    bottom: 100,
-    backgroundColor: '#ddd',
-    padding: 10,
-    borderRadius: 20,
-    elevation: 3,
-  },
-  noImageText: {
-    color: 'purple',
-    fontWeight: '400',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    paddingVertical: 4,
-    textAlign: 'center',
-  },
-  similarImagesText: {
-    color: 'purple',
-    fontWeight: '400',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    paddingVertical: 4,
-    textAlign: 'center',
-  },
-  headerContainer: {
-        
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginVertical: 20,
-        paddingVertical: 10,
-        backgroundColor: '#f3e5f5',
-        borderRadius: 10,
-        elevation: 3,
-        
-        width:'100%'
-    },
-    similarImagesText: {
-        color: 'purple',
-        fontWeight: '700',
-        paddingHorizontal: 15,
-        fontSize: 18,
-    },
-    line: {
-        flex: 1,
-        height: 2,
-        backgroundColor: 'purple',
-        borderRadius: 1,
-    },
 
-
-
-});
 
 export default VisualSearch;

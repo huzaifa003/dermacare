@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View, Linking, StyleSheet, Image, RefreshControl, ActivityIndicator } from 'react-native';
-import { Card, Title, Paragraph, Button, useTheme, Text, Divider } from 'react-native-paper';
+import { Card, Title, Paragraph, Button, Text, Divider, useTheme } from 'react-native-paper';
 import GeneralHeader from '../components/GeneralHeader';
 
 const NewsScreen = () => {
+  
   const [newsData, setNewsData] = useState([
     {
       name: "Pharmacist warns over eight tell-tale skin marks from a harmless midge bite to a dangerous spider wound",
@@ -55,7 +56,7 @@ const NewsScreen = () => {
     <>
     <GeneralHeader title="News" />
       <ScrollView
-        style={styles.container}
+        style={[styles.container, {backgroundColor: colors.background}]}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
