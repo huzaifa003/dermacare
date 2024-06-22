@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, ScrollView, View, TouchableOpacity, Linking } from 'react-native';
-import { Card, Title, Paragraph, Avatar, Button, useTheme } from 'react-native-paper';
+import { Card, Title, Paragraph, Avatar, Button, useTheme, Surface } from 'react-native-paper';
 import GeneralHeader from '../components/GeneralHeader';
 import { Ionicons } from '@expo/vector-icons';
 import * as Sharing from 'expo-sharing';
@@ -17,15 +17,16 @@ const ShowDetails = ({ route }) => {
     card: {
       margin: 10,
       elevation: 4,
-      backgroundColor: colors.secondary,
+      backgroundColor: colors.background,
     },
     cover: {
       height: 200,
+      
     },
     title: {
       fontSize: 20,
       fontWeight: 'bold',
-      color: colors.background,
+      color: colors.inversePrimary,
     },
     subtitle: {
       fontSize: 18,
@@ -40,6 +41,54 @@ const ShowDetails = ({ route }) => {
       color: colors.secondary,
     },
   });
+
+  const markdownStyles = StyleSheet.create({
+    heading1: {
+      fontSize: 32,
+      color: colors.inverseSurface,
+    },
+    body : {
+      color: colors.inverseSurface,
+    },
+    heading2: {
+      fontSize: 24,
+      color: colors.inverseSurface,
+    },
+    heading3: {
+      fontSize: 18,
+      color: colors.inverseSurface,
+    },
+    heading4: {
+      fontSize: 16,
+      color: colors.inverseSurface,
+    },
+    heading5: {
+      fontSize: 13,
+      color: colors.inverseSurface,
+    },
+    heading6: {
+      fontSize: 11,
+      color: colors.inverseSurface,
+    }
+  });
+
+
+  const rules = {
+    heading1: (node, children, parent, styles) =>
+      <Text key={node.key} style={[styles.heading, styles.heading1]}>
+        {children}
+      </Text>,
+    heading2: (node, children, parent, styles) =>
+      <Text key={node.key} style={[styles.heading, styles.heading2]}>
+        "{children}"
+      </Text>,
+    heading3: (node, children, parent, styles) =>
+      <Text key={node.key} style={[styles.heading, styles.heading3]}>
+       "{children}"
+      </Text>,
+};
+
+
   
   const handleDownloadPdf = () => {
     Linking.openURL(pdf); // Opens the PDF URL in the user's default web browser
@@ -65,12 +114,12 @@ const ShowDetails = ({ route }) => {
           titleStyle={styles.title}
         //   subtitle="Detailed View"
         />
-        <Card.Cover source={{ uri: image }} style={styles.cover} />
+        <Surface style={{backgroundColor: colors.background, padding: 5, margin: 5, borderRadius: 10}}><Card.Cover source={{ uri: image }} style={styles.cover} /></Surface>
         <Card.Content>
-          <Title style={[styles.subtitle, {color: colors.primary}]}>Recommendation</Title>
-          <Markdown  style={[styles.paragraph, {body: { color: colors.primary}}]}>{recommendation}</Markdown>
-          <Title style={[styles.subtitle, {color: colors.primary}]}>Feedback</Title>
-          <Paragraph style={styles.paragraph}>{feedback}</Paragraph>
+          <Title style={[styles.subtitle, {color: colors.inversePrimary}]}>Recommendation</Title>
+          <Markdown  style={markdownStyles}>{recommendation}</Markdown>
+          <Title style={[styles.subtitle, {color: colors.inversePrimary}]}>Feedback</Title>
+          <Paragraph style={[styles.paragraph, {color: colors.inverseSurface}]}>{feedback}</Paragraph>
         </Card.Content>
         <Card.Actions>
           {pdf ? (
