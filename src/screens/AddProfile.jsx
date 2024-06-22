@@ -50,7 +50,14 @@ const AddProfile = () => {
             name: name,
             age: age,
             summary: summary
+        })
+        .then(() => {
+            navigation.navigate('Patient Home');
+        })
+        .catch((error) => {
+            console.error('Error adding document: ', error);
         });
+        
     }
 
     return (
