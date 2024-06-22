@@ -7,10 +7,12 @@ import VisualSearch from './Derma/VisualSearch';
 import Settings from './Derma/Settings';
 import Header from './Header';
 import RAGChat from '../screens/RAGChat';
+import { useTheme } from 'react-native-paper';
 
 const Tab = createBottomTabNavigator();
 
 const BottomNavDerma = () => {
+  const theme = useTheme();
   return (
     <>
     <Header/>
@@ -35,8 +37,9 @@ const BottomNavDerma = () => {
           return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
         },
       
-        tabBarActiveTintColor: '#4287f5',
+        tabBarActiveTintColor: theme.colors.onPrimaryContainer,
         tabBarInactiveTintColor: 'gray',
+        tabBarStyle : {backgroundColor: theme.colors.background}
       })}
     >
       <Tab.Screen options={{ headerShown: false }} name="Home" component={Home} />

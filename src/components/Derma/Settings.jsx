@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { View, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import { Avatar, List, Button, Divider, TextInput, useTheme } from "react-native-paper";
+import { Avatar, List, Button, Divider, TextInput, useTheme, Switch } from "react-native-paper";
 import { auth, db, storage } from "../../Connection/DB";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -9,8 +9,11 @@ import * as ImagePicker from 'expo-image-picker';
 import { updatePassword, updateProfile } from "firebase/auth";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { update, ref as databaseRef } from "firebase/database";
-
+import { useContext } from "react";
+import ThemeContext from "../../context/ThemeContext";
 const Settings = () => {
+
+  const { isDark, setIsDark } = useContext(ThemeContext);
   const navigation = useNavigation()
   const [userData, setUserData] = useState({});
   const [password, setPassword] = useState('');
@@ -182,6 +185,12 @@ const Settings = () => {
   }
 
 
+  const toggleTheme = () => {
+    setIsDark(!isDark);
+    // Additional implementation may be needed to apply theme changes
+  };
+
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.profileContainer}>
@@ -237,6 +246,13 @@ const Settings = () => {
         >
           Change Password
         </Button>
+
+        <List.Item
+          title="Dark Theme"
+          left={(props) => <List.Icon {...props} icon={isDark ? "brightness-7" : "brightness-4"} />}
+          right={() => <Switch value={isDark} onValueChange={toggleTheme} />}
+        />
+
       </List.Section>
       <Divider />
       <List.Section>

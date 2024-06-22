@@ -12,10 +12,14 @@ import NewsScreen from '../screens/NewsScreen';
 import DiseaseInformationScreen from '../screens/DiseaseInformationScreen';
 import ListReport from './Derma/ListReport';
 import PatientHome from './PatientHome';
+import { useContext } from 'react';
+import { useTheme } from 'react-native-paper';
 
 const Tab = createBottomTabNavigator();
 
 const PatientBottomMenu = () => {
+  const theme = useTheme();
+  
   return (
     <>
     <Header/>
@@ -44,8 +48,9 @@ const PatientBottomMenu = () => {
           return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
         },
       
-        tabBarActiveTintColor: '#4287f5',
+        tabBarActiveTintColor: theme.colors.onPrimaryContainer,
         tabBarInactiveTintColor: 'gray',
+        tabBarStyle : {backgroundColor: theme.colors.background}
       })}
     >
       <Tab.Screen options={{ headerShown: false }} name="Home" component={PatientHome} />
