@@ -81,6 +81,10 @@ const Login = () => {
           AsyncStorage.setItem('userType', 'patient');
           AsyncStorage.setItem('email', email);
           AsyncStorage.setItem("uid", auth.currentUser.uid);
+          if (auth.currentUser.photoURL !== null) {
+            AsyncStorage.setItem('photoURL', auth.currentUser.photoURL);
+          }
+          
           navigation.navigate('Patient');
         })
         .catch(error => {

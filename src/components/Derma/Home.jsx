@@ -62,10 +62,10 @@ const Home = () => {
         console.log(query);
         if (query.trim() && query.trim() != "") {
 
-            const filteredData = patients.filter(
-
-                patient => patient.name.toLowerCase().includes(query.toLowerCase())
-            );
+            const filteredData = patients.filter((report)=>{
+                return report.name?.toLowerCase().includes(query.toLowerCase()) || report.id?.toString().toLowerCase().includes(query) || report.email?.toLowerCase().includes(query.toLowerCase()) || report.age?.includes(query);
+            
+            })
             setFilteredPatients(filteredData);
         }
     };

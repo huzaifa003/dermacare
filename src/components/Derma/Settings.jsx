@@ -57,17 +57,18 @@ const Settings = () => {
       const email = await AsyncStorage.getItem('email');
       const uid = await AsyncStorage.getItem('uid');
       const userType = await AsyncStorage.getItem('userType');
-
-
-
-      if (AsyncStorage.getItem('photoURL') !== null) {
-        const photoURL = await AsyncStorage.getItem('photoURL');
+      const image = await AsyncStorage.getItem('photoURL');
+      
+      console.log(image)
+      
+      if (image !== null || image !== undefined) {
+        const photoURL =image
         setUserData({
           name: email.split('@')[0],
           email: email,
           avatarUrl: photoURL,
         });
-        return;
+        
       }
       else {
         setUserData({
@@ -174,6 +175,7 @@ const Settings = () => {
     // Implement your change password logic here
     updatePassword(auth.currentUser, password)
       .then(() => {
+        console.log(password)
         alert('Password updated successfully');
         console.log('Password updated successfully');
       })
