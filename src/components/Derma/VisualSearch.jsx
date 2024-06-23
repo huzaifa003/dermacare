@@ -43,6 +43,7 @@ const VisualSearch = ({ route }) => {
 
   async function compressImage(uri) {
     try {
+      throw new Error('This is an error');
       const manipResult = await manipulateAsync(
         uri,
         [{ resize: { width: 300 } }], // You might need to adjust the width depending on the aspect ratio
@@ -59,7 +60,7 @@ const VisualSearch = ({ route }) => {
     }
     catch (error) {
       console.error('Error compressing image:', error);
-      return uri;
+      return {uri: uri};
     }
     
   }
@@ -113,6 +114,8 @@ const VisualSearch = ({ route }) => {
     console.log('Compressed:', compressed);
     setSelectedImage(compressed.uri);
     // }
+
+    return;
 
 
 
