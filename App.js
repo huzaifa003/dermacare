@@ -77,7 +77,7 @@ const App = () => {
             <Stack.Screen name='Home' component={Home} />
 
             <Stack.Screen name="listreport" component={ListReport} />
-            <Stack.Screen name="All Reports" component={ReportList} />
+            {/* <Stack.Screen name="All Reports" component={ReportList} /> */}
             <Stack.Screen name="Ask Questions" component={AskQuestions} />
             <Stack.Screen name="Disease Information" component={DiseaseInformationScreen} />
             <Stack.Screen name="Visual Search" component={VisualSearch} />

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, FlatList, KeyboardAvoidingView, Platform, TouchableOpacity, Image } from 'react-native';
 import { Button, TextInput, Text, Card, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import tw from 'twrnc';
+import tw, { style } from 'twrnc';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { get, ref, set, onValue, remove } from 'firebase/database';
 import { db } from '../Connection/DB';
@@ -18,7 +18,7 @@ const Chat = ({ route }) => {
     const [userRole, setUserRole] = useState('');
     const [username, setUsername] = useState('');
     useEffect(() => {
-        AsyncStorage.getItem("role").then(role => setUserRole(role || "derm"));
+        AsyncStorage.getItem("userType").then(role => setUserRole(role || "derm"));
 
         const messagesRef = ref(db, `patients/${patientId}/reports/${reportId}/chat`);
         onValue(messagesRef, (snapshot) => {
@@ -48,7 +48,7 @@ const Chat = ({ route }) => {
         set(messageRef, {
             message: newMessage,
             userId: patientId,
-            role: await AsyncStorage.getItem("role") || "derm",
+            role: await AsyncStorage.getItem("userType") || "derm",
         }).then(() => { console.log('Message sent!'); })
             .catch((error) => console.error(error))
             .finally(() => setNewMessage(''));
@@ -73,11 +73,11 @@ const Chat = ({ route }) => {
                         source={{ uri: "https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png" }}
 
                     />
-                    <Text style={[tw`${textStyle}`]}>{username}</Text>
+                    <Text style={{color: theme.dark? theme.colors.background  :theme.colors.inverseSurface}}>{username}</Text>
                 </View>
-                <Text style={{color: theme.colors.surface}}>{item.message}</Text>
-                <Text style={{color: theme.colors.surface}}>{item.timestamp}</Text>
-                <Text style={{color: theme.colors.surface}}>{item.role}</Text>
+                <Text style={{color: theme.dark? theme.colors.background  :theme.colors.inverseSurface}}>{item.message}</Text>
+                <Text style={{color: theme.dark? theme.colors.background  :theme.colors.inverseSurface}}>{item.timestamp}</Text>
+                <Text style={{color: theme.dark? theme.colors.background  :theme.colors.inverseSurface}}>{item.role}</Text>
             </Card>
         );
     };

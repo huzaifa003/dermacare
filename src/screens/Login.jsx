@@ -278,7 +278,7 @@ const Login = () => {
             <Text style={tw`text-center text-lg font-semibold`}>Login</Text>
           </Button>
           <Button onPress={() => { navigation.navigate('Signup') }} mode='text'>
-            <Text style={tw`text-blue-600 mb-8 text-right py-4`}>Dont have account ? Signup</Text>
+            <Text style={tw`text-blue-600 mb-8 text-right py-4`}>Don't have an account? Signup</Text>
           </Button>
         </ScrollView>
       </KeyboardAvoidingView>

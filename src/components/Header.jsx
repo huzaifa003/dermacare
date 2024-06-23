@@ -29,6 +29,8 @@ const Header = () => {
       width: 50,
       height: 50,
       borderRadius: 25,
+      // color: theme.colors.tertiary,
+      // backgroundColor: theme.colors.onBackground,
     },
     title: {
       fontSize: 16,

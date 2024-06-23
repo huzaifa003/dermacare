@@ -47,7 +47,7 @@ const VisualSearch = ({ route }) => {
       [{ resize: { width: 300 } }], // You might need to adjust the width depending on the aspect ratio
       { compress: 0.5, format: SaveFormat.JPEG }
     );
-    
+
     console.log(manipResult.size)
     if (manipResult.size < 1000000) {
       return manipResult.uri; // If the image is already less than 1MB, return it
@@ -101,13 +101,13 @@ const VisualSearch = ({ route }) => {
     }
     let compressed = imageUri
     // if (blob.size > 990000) {
-      console.log("hekllko")
-      compressed = await compressImage(imageUri);
-      console.log('Compressed:', compressed);
-      setSelectedImage(compressed.uri);
+    console.log("hekllko")
+    compressed = await compressImage(imageUri);
+    console.log('Compressed:', compressed);
+    setSelectedImage(compressed.uri);
     // }
-    
-    
+
+
 
 
 
@@ -125,16 +125,7 @@ const VisualSearch = ({ route }) => {
       'Content-Type': 'multipart/form-data',
     };
 
-    let imgs = await AsyncStorage.getItem('images');
-    // imgs = undefined;
-    console.log(images);
-    if (imgs && imgs.length > 0) {
-      console.log(imgs)
-      setImages(JSON.parse(imgs));
-      setLoading(false);
-      return;
 
-    }
 
     console.log('images:', images)
     try {
@@ -171,6 +162,16 @@ const VisualSearch = ({ route }) => {
       await AsyncStorage.setItem('images', JSON.stringify(images));
       setLoading(false);
     } catch (error) {
+      let imgs = await AsyncStorage.getItem('images');
+      // imgs = undefined;
+      console.log(images);
+      if (imgs && imgs.length > 0) {
+        console.log(imgs)
+        setImages(JSON.parse(imgs));
+        setLoading(false);
+        return;
+
+      }
       console.error("Error uploading image: ", error);
       setLoading(false);
     }

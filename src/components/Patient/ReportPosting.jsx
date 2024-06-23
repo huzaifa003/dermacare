@@ -7,13 +7,66 @@ import { auth, db, storage } from '../../Connection/DB';
 import { onAuthStateChanged } from 'firebase/auth';
 import Loading from '../Loading';
 import { useNavigation } from '@react-navigation/native';
-import { Button, FAB, Modal, Portal, Provider, Surface, TextInput} from 'react-native-paper';
+import { Button, FAB, Modal, Portal, Provider, Surface, TextInput, useTheme} from 'react-native-paper';
 import GeneralHeader from '../GeneralHeader';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 
 
 const ReportPosting = () => {
+    const theme = useTheme();
+
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            padding: 20,
+            
+            backgroundColor: theme.colors.background, // Light gray background
+        },
+        title: {
+            fontSize: 24,
+            fontWeight: 'bold',
+            marginBottom: 20,
+            textAlign: 'center',
+            color: theme.colors.primary, // Dark gray for better contrast
+        },
+        input: {
+            justifyContent: 'center',
+            alignContent: 'center',
+            padding: 10,
+            margin: 10,
+            backgroundColor: theme.colors.surface, // White background for the input
+        },
+        button: {
+            backgroundColor: '#5c67f2', // A soft blue for the button
+            padding: 15,
+            borderRadius: 5,
+            alignItems: 'center',
+            marginBottom: 20,
+        },
+        buttonText: {
+            color: '#fff', // White text on the button
+            fontSize: 16,
+            fontWeight: 'bold',
+        },
+        preview: {
+            width: 300,
+            height: 300,
+            marginBottom: 20,
+            alignSelf: 'center',
+            borderWidth: 1,
+            borderColor: '#ddd', // Adding border to the image
+        },
+        modalContent: {
+            backgroundColor: 'white',
+            padding: 20,
+            margin: 50,
+            borderRadius: 10,
+            alignItems: 'center',
+        },
+    });
+
+
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
     const [base64, setBase64] = useState(null);
@@ -38,7 +91,7 @@ const ReportPosting = () => {
             }
             const response = await model.generateContent([prompt, image]);
             const result = await response.response.text();
-            if (result.includes("false")) {
+            if (result.toLowerCase().includes("false")) {
                 alert("Please upload an image of human skin");
                 setIsSkin(false);
                 return;
@@ -157,7 +210,7 @@ const ReportPosting = () => {
                         .then(() => {
                             console.log("Successfully updated");
                             setLoading(false)
-                            navigation.navigate('AllReports');
+                            navigation.navigate('All Reports');
                         }
                         )
                         .catch((error) => {
@@ -181,15 +234,16 @@ const ReportPosting = () => {
 
     return (
         <>
-            {/* <GeneralHeader title="Report Posting" /> */}
+            <GeneralHeader title="Report Posting" />
             <View style={styles.container}>
 
-                <Provider>
+                
                     {loading ? <Loading /> : null}
 
                     <TextInput
+                        mode='outlined'
                         style={[styles.input]}
-                        placeholder="Enter description"
+                        placeholder="Enter description.."
                         multiline={true}
 
                         onChangeText={setDescription}
@@ -223,63 +277,13 @@ const ReportPosting = () => {
                     <Button icon={'send'} mode='contained' onPress={geminiContent}>
                         Submit Report
                     </Button>
-                </Provider>
+                
             </View>
         </>
 
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        justifyContent: 'center',
-        backgroundColor: '#f4f4f4', // Light gray background
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: 'center',
-        color: '#333', // Dark gray for better contrast
-    },
-    input: {
-        
-        borderColor: '#ddd', // Lighter border color
-        borderWidth: 1,
-        marginBottom: 20,
-        padding: 5,
-        borderRadius: 5, // Rounded corners
-        backgroundColor: '#fff', // White background for the input
-    },
-    button: {
-        backgroundColor: '#5c67f2', // A soft blue for the button
-        padding: 15,
-        borderRadius: 5,
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    buttonText: {
-        color: '#fff', // White text on the button
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    preview: {
-        width: 300,
-        height: 300,
-        marginBottom: 20,
-        alignSelf: 'center',
-        borderWidth: 1,
-        borderColor: '#ddd', // Adding border to the image
-    },
-    modalContent: {
-        backgroundColor: 'white',
-        padding: 20,
-        margin: 50,
-        borderRadius: 10,
-        alignItems: 'center',
-    },
-});
+
 
 export default ReportPosting;

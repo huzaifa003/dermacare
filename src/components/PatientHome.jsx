@@ -61,10 +61,12 @@ const PatientHome = ({ navigation }) => {
 
 
   const features = [
-    { name: 'Maps', icon: 'map', screen: 'Maps' },
-    { name: 'Visual Search', icon: 'database-eye', screen: 'Visual Search' },
-    { name: 'News', icon: 'newspaper', screen: 'News' },
+    
+    { name: 'Add Report', icon: 'file-plus', screen: 'ReportPosting' },
     { name: 'Disease Info', icon: 'layers-search', screen: 'Disease Information' },
+    { name: 'News', icon: 'newspaper', screen: 'News' },
+    { name: 'Maps', icon: 'map', screen: 'Maps' },
+    
   ];
 
   const FeatureTile = ({ name, icon, navigateTo }) => (
