@@ -42,19 +42,26 @@ const VisualSearch = ({ route }) => {
   }, [route.params?.image]);
 
   async function compressImage(uri) {
-    const manipResult = await manipulateAsync(
-      uri,
-      [{ resize: { width: 300 } }], // You might need to adjust the width depending on the aspect ratio
-      { compress: 0.5, format: SaveFormat.JPEG }
-    );
-
-    console.log(manipResult.size)
-    if (manipResult.size < 1000000) {
-      return manipResult.uri; // If the image is already less than 1MB, return it
-    } else {
-      // If not, compress further by reducing the quality
-      return compressImageFurther(manipResult.uri);
+    try {
+      const manipResult = await manipulateAsync(
+        uri,
+        [{ resize: { width: 300 } }], // You might need to adjust the width depending on the aspect ratio
+        { compress: 0.5, format: SaveFormat.JPEG }
+      );
+  
+      console.log(manipResult.size)
+      if (manipResult.size < 1000000) {
+        return manipResult.uri; // If the image is already less than 1MB, return it
+      } else {
+        // If not, compress further by reducing the quality
+        return compressImageFurther(manipResult.uri);
+      }
     }
+    catch (error) {
+      console.error('Error compressing image:', error);
+      return uri;
+    }
+    
   }
 
   async function compressImageFurther(uri) {
