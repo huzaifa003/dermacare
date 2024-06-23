@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/Vector.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.bunty003.myapp"
