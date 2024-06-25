@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, KeyboardAvoidingView, Keyboard } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { ref as dbRef, set } from 'firebase/database';
 import { ref as storageRef, uploadString, getDownloadURL, uploadBytes } from 'firebase/storage';
@@ -7,9 +7,10 @@ import { auth, db, storage } from '../../Connection/DB';
 import { onAuthStateChanged } from 'firebase/auth';
 import Loading from '../Loading';
 import { useNavigation } from '@react-navigation/native';
-import { Button, FAB, Modal, Portal, Provider, Surface, TextInput, useTheme} from 'react-native-paper';
+import { Button, FAB, Modal, Portal, Provider, Surface, TextInput, useTheme } from 'react-native-paper';
 import GeneralHeader from '../GeneralHeader';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 
 
@@ -20,7 +21,7 @@ const ReportPosting = () => {
         container: {
             flex: 1,
             padding: 20,
-            
+
             backgroundColor: theme.colors.background, // Light gray background
         },
         title: {
@@ -74,7 +75,7 @@ const ReportPosting = () => {
     const [loading, setLoading] = useState(false);
     const [isSkin, setIsSkin] = useState(true);
     const navigation = useNavigation();
-    
+
 
     const generative = new GoogleGenerativeAI("AIzaSyAmf5o7tzb0Nq9K9eS3m2HXX7nSrBZokwg");
     const model = generative.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -235,9 +236,10 @@ const ReportPosting = () => {
     return (
         <>
             <GeneralHeader title="Report Posting" />
-            <View style={styles.container}>
+            <KeyboardAvoidingView behavior='padding' style={styles.container}>
+                <View>
 
-                
+
                     {loading ? <Loading /> : null}
 
                     <TextInput
@@ -263,22 +265,24 @@ const ReportPosting = () => {
                     </View>
                     <Text />
 
-
-                    {image && (
-                        <Surface style={{alignItems:'center', padding: 10, margin: 10, borderRadius: 10, elevation: 5}}>
-                        <Image
-                            source={{ uri: image }}
-                            style={styles.preview}
-                        />
-                        </Surface>
-                    )}
+                    <TouchableOpacity  onPress={()=>{Keyboard.dismiss()}}>
+                        {image && (
+                            <Surface style={{ alignItems: 'center', padding: 10, margin: 10, borderRadius: 10, elevation: 5 }}>
+                                <Image
+                                    source={{ uri: image }}
+                                    style={styles.preview}
+                                />
+                            </Surface>
+                        )}
+                    </TouchableOpacity>
 
 
                     <Button icon={'send'} mode='contained' onPress={geminiContent}>
                         Submit Report
                     </Button>
-                
-            </View>
+
+                </View>
+            </KeyboardAvoidingView>
         </>
 
     );
